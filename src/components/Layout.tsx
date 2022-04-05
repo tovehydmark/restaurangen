@@ -7,7 +7,7 @@ export function Layout() {
         <nav>
           <ul>
             <li>
-              <Link to="/">Hem</Link>
+              <Link to="/">The Codfather</Link>
               <Link to="/Contact">Kontakt</Link>
               <Link to="/Booking">Boka bord</Link>
               <Link to="Menu">Meny</Link>
