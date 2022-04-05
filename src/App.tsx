@@ -7,6 +7,7 @@ import { Home } from "./components/Home";
 import { Contact } from "./components/Contact";
 import { Booking } from "./components/Booking";
 import { Menu } from "./components/Menu";
+import { NotFound } from "./components/NotFound";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <Route path="/Contact" element={<Contact />} />
             <Route path="/Booking" element={<Booking />} />
             <Route path="Menu" element={<Menu />} />
+            <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
       </BrowserRouter>
