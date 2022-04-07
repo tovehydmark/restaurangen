@@ -1,10 +1,10 @@
 import styled, { keyframes } from "styled-components";
-import { createRestaurant } from "../services/createRestaurant";
-import fishImg from "../img/fishfood.jpg";
-import seafoodImg from "../img/seafood.jpg";
-import tableImg from "../img/table.jpg";
+// import { createRestaurant } from "../services/createRestaurant";
+import fishImg from "../images/fishfood.jpg";
+import seafoodImg from "../images/seafood.jpg";
+import tableImg from "../images/table.jpg";
 
-//fixa styling och keyframes sist
+// STYLING (fixa keyframes sist) //
 const changeBg = keyframes`
     0%{right: 0px;}
     10%{right: 0px;}
@@ -25,7 +25,6 @@ export const Image = styled.img`
   height: 800px;
   animation: ${changeBg} 33s ease infinite running;
 `;
-
 export const DivImg = styled.div`
   display: flex;
   overflow: hidden;
