@@ -17,7 +17,7 @@ interface IBookingInformation {
 
 interface IPrintBookingsProps {
   bookingDetails: IBookingInformation;
-  customerDetails: ICustomerInformation;
+  // customerDetails: ICustomerInformation;
 }
 
 export function PrintBookings(props: IPrintBookingsProps) {
