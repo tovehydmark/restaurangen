@@ -74,24 +74,13 @@ export function Admin() {
   let bookingInformation = bookingInfo.map(
     (booking: IBookingInformation, i) => {
       return (
-        <tr key={i} className="tableRowToFlex">
-          <td>
-            Bokningsid: {booking.id}
-            <br />
-            Datum: {booking.date}
-            <br />
-            Tid: {booking.time}
-            <br />
-            Antal gäster: {booking.numberOfGuests}
-            <br />
-            Kundid: {booking.customerId}
-          </td>
-          {/* <td>Bokningsid: {booking.id}</td>
-          <td>Datum: {booking.date}</td>
-          <td>Tid: {booking.time}</td>
-          <td> Antal gäster: {booking.numberOfGuests}</td>
-          <td>Kundid: {booking.customerId}</td> */}
-        </tr>
+        <td key={i} className="tableRowToFlex">
+          Bokningsid: {booking.id}
+          Datum: {booking.date}
+          Tid: {booking.time}
+          Antal gäster: {booking.numberOfGuests}
+          Kundid: {booking.customerId}
+        </td>
       );
     }
   );
@@ -99,26 +88,17 @@ export function Admin() {
   let customerInformation = customerInfo.map(
     (customer: ICustomerInformation, i) => {
       return (
-        <tr key={i} className="tableRowToFlex">
-          <td>Kundid: {customer.id}</td>
-          <td>Förnamn: {customer.name}</td>
-          <td>Efternamn: {customer.lastname}</td>
-          <td>Email: {customer.email}</td>
-          <td>Telefon: {customer.phone}</td>
-        </tr>
+        <td key={i} className="tableRowToFlex">
+          Kundid: {customer.id}
+          Förnamn: {customer.name}
+          Efternamn: {customer.lastname}
+          Email: {customer.email}
+        </td>
       );
     }
   );
 
-  // for (let i = 0; i < bookingInfo.length; i++) {
-  //   for (let j = 0; j < customerInfo.length; j++) {
-  //     if (bookingInfo[i].customerId === customerInfo[j].id) {
-  //       console.log("hej");
-  //     }
-  //   }
-  // }
-
-  //Man kanske kan sortera på id istället, då måste de ju ligga bredvid varandra. Ingen kund utan bokning? Eller behålls uppgifterna om kunden även om bokningen tas bort?
+  //Får problem med layouten när jag vill ha en knapp i tabellen. Kommer nog göra en styled div och använda istället för tabell, tror det blir enklare så
 
   return (
     <>
@@ -129,8 +109,9 @@ export function Admin() {
             <th>Kundinfo</th>
             <th>Radera bokning</th>
           </tr>
-          {bookingInformation}
-          {customerInformation}
+
+          <tr>{bookingInformation}</tr>
+          <tr>{customerInformation}</tr>
         </tbody>
       </table>
     </>
