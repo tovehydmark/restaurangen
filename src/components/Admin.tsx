@@ -19,24 +19,7 @@ interface IBookingInformation {
 }
 
 export function Admin() {
-  //Customer info måste hämtas och sparas i en lista som vi mappar igenom
-  const [customerInfo, setCustomerInfo] = useState([
-    {
-      id: "623b85d54396b96c57bde7c3",
-      name: "Franzén",
-      lastname: "Sebastian",
-      email: "someone@somedomain.com",
-      phone: "070-1112233",
-    },
-    {
-      id: "oirjsoisijfoj",
-      name: "Hydmark",
-      lastname: "Tove",
-      email: "evot@kramdyh.se",
-      phone: "070-0000000",
-    },
-  ]);
-  //Samma med booking info
+  //Booking info måste hämtas och sparas i en lista som vi mappar igenom. Detta bara placeholder
   const [bookingInfo, setBookingInfo] = useState([
     {
       id: "1234",
@@ -56,6 +39,24 @@ export function Admin() {
     },
   ]);
 
+  //Samma med customer info
+  const [customerInfo, setCustomerInfo] = useState([
+    {
+      id: "623b85d54396b96c57bde7c3",
+      name: "Franzén",
+      lastname: "Sebastian",
+      email: "someone@somedomain.com",
+      phone: "070-1112233",
+    },
+    {
+      id: "oirjsoisijfoj",
+      name: "Hydmark",
+      lastname: "Tove",
+      email: "evot@kramdyh.se",
+      phone: "070-0000000",
+    },
+  ]);
+
   //Uppdaterar booking info-listan
   useEffect(() => {
     setBookingInfo([...bookingInfo]);
@@ -68,30 +69,30 @@ export function Admin() {
     // console.log(customerInfo);
   }, []);
 
-  //Filtrera på id. delete tar bort via id också så det är bäst
-  // let bookingInformation = bookingInfo.map(
-  //   (booking: IBookingInformation, i) => {
-  //     return (
-  //       <>
-  //         <PrintBookings
-  //           bookingDetails={booking}
-  //           // customerDetails={undefined}
-  //         ></PrintBookings>
-  //       </>
-  //     );
-  //   }
-  // );
-
   //Kan man kanske skapa en ny lista som man pushar
   let bookingInformation = bookingInfo.map(
     (booking: IBookingInformation, i) => {
       return (
         <tr key={i} className="tableRowToFlex">
-          <td>Bokningsid:{booking.id}</td>
+          <td>Bokningsid: {booking.id}</td>
           <td>Datum: {booking.date}</td>
           <td>Tid: {booking.time}</td>
           <td> Antal gäster: {booking.numberOfGuests}</td>
           <td>Kundid: {booking.customerId}</td>
+        </tr>
+      );
+    }
+  );
+
+  let customerInformation = customerInfo.map(
+    (customer: ICustomerInformation, i) => {
+      return (
+        <tr key={i} className="tableRowToFlex">
+          <td>Kundid: {customer.id}</td>
+          <td>Förnamn: {customer.name}</td>
+          <td>Efternamn: {customer.lastname}</td>
+          <td>Email: {customer.email}</td>
+          <td>Telefon: {customer.phone}</td>
         </tr>
       );
     }
@@ -107,6 +108,7 @@ export function Admin() {
             <th>Radera bokning</th>
           </tr>
           {bookingInformation}
+          {customerInformation}
         </tbody>
       </table>
     </>
