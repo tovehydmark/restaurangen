@@ -1,0 +1,7 @@
+@import url("https://fonts.googleapis.com/css2?family=Merriweather&family=Roboto&display=swap");
+
+@import "_base";
+
+@media screen and (min-width: 1024px) {
+    @import "_desktop";
+}

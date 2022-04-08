@@ -1,4 +1,6 @@
+import "../style/style.scss";
 import styled, { keyframes } from "styled-components";
+
 // import { createRestaurant } from "../services/createRestaurant";
 import fishImg from "../images/fishfood.jpg";
 import seafoodImg from "../images/seafood.jpg";
