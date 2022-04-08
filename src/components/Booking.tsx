@@ -90,7 +90,7 @@ export function Booking() {
       ></input>
 
       <label htmlFor="numberOfGuests">Antal personer: </label>
-      <input name="numberOfGuests" type="number" min="1" max="6"></input>
+      <input name="numberOfGuests" type="number" min="1" max="90"></input>
 
       <form>
         <input

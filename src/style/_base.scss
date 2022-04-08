@@ -1,16 +1,62 @@
 //För mobil-layout
+$base-padding: 8px;
 
-p {
+header {
+    font-family: "merriweather, serif";
+    display: flex;
+    justify-content: center;
+
+}
+
+main {
+
+    p {
+        font-family: 'roboto, sans-serif';
+        font-size: 1rem;
+        padding: $base-padding;
+    }
+
+    h2 {
+        font-family: "merriweather, serif";
+        font-size: 2rem;
+        padding: $base-padding * 2;
+    }
+
+    h3 {
+        font-family: "merriweather, serif";
+        font-size: 1.5rem;
+    }
+
+
+}
+
+footer {
     font-family: 'roboto, sans-serif';
-    font-size: 1rem;
 }
 
-h2 {
-    font-family: "merriweather, serif";
-    font-size: 2rem;
+.tableRowToFlex {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid red;
+
 }
 
-h3 {
-    font-family: "merriweather, serif";
-    font-size: 1.5rem;
+.tableBookingCustomerDetails {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 800px;
+    justify-content: center;
+
+}
+
+table {
+
+    width: 100%;
+    background-color: rgb(122, 129, 126);
+}
+
+tr {
+    margin: $base-padding *2;
+
 }
