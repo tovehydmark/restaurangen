@@ -1,3 +1,4 @@
+import "../style/style.scss";
 import { useEffect, useState } from "react";
 import { PrintBookings } from "./PrintBookings";
 
@@ -22,7 +23,7 @@ export function Admin() {
   //Booking info måste hämtas och sparas i en lista som vi mappar igenom. Detta bara placeholder
   const [bookingInfo, setBookingInfo] = useState([
     {
-      id: "1234",
+      id: "333333333",
       restaurantId: "623b85d54396b96c57bde7c3",
       date: "2022-01-01",
       time: "18:00",
@@ -30,7 +31,7 @@ export function Admin() {
       customerId: "623b85d54396b96c57bde7c3",
     },
     {
-      id: "5678",
+      id: "6666666",
       restaurantId: "623b85d54396b96c57bde7c3",
       date: "2022-01-01",
       time: "18:00",
@@ -42,14 +43,14 @@ export function Admin() {
   //Samma med customer info
   const [customerInfo, setCustomerInfo] = useState([
     {
-      id: "623b85d54396b96c57bde7c3",
+      id: "333333333",
       name: "Franzén",
       lastname: "Sebastian",
       email: "someone@somedomain.com",
       phone: "070-1112233",
     },
     {
-      id: "oirjsoisijfoj",
+      id: "6666666",
       name: "Hydmark",
       lastname: "Tove",
       email: "evot@kramdyh.se",
@@ -74,11 +75,22 @@ export function Admin() {
     (booking: IBookingInformation, i) => {
       return (
         <tr key={i} className="tableRowToFlex">
-          <td>Bokningsid: {booking.id}</td>
+          <td>
+            Bokningsid: {booking.id}
+            <br />
+            Datum: {booking.date}
+            <br />
+            Tid: {booking.time}
+            <br />
+            Antal gäster: {booking.numberOfGuests}
+            <br />
+            Kundid: {booking.customerId}
+          </td>
+          {/* <td>Bokningsid: {booking.id}</td>
           <td>Datum: {booking.date}</td>
           <td>Tid: {booking.time}</td>
           <td> Antal gäster: {booking.numberOfGuests}</td>
-          <td>Kundid: {booking.customerId}</td>
+          <td>Kundid: {booking.customerId}</td> */}
         </tr>
       );
     }
@@ -98,9 +110,19 @@ export function Admin() {
     }
   );
 
+  // for (let i = 0; i < bookingInfo.length; i++) {
+  //   for (let j = 0; j < customerInfo.length; j++) {
+  //     if (bookingInfo[i].customerId === customerInfo[j].id) {
+  //       console.log("hej");
+  //     }
+  //   }
+  // }
+
+  //Man kanske kan sortera på id istället, då måste de ju ligga bredvid varandra. Ingen kund utan bokning? Eller behålls uppgifterna om kunden även om bokningen tas bort?
+
   return (
     <>
-      <table>
+      <table className="tableBookingCustomerDetails">
         <tbody>
           <tr>
             <th>Bokningsinfo</th>

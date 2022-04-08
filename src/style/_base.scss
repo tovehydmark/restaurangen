@@ -37,4 +37,19 @@ footer {
 .tableRowToFlex {
     display: flex;
     flex-direction: column;
+    border: 1px solid red;
+
+}
+
+.tableBookingCustomerDetails {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 800px;
+    justify-content: center;
+
+}
+
+tr {
+    margin: $base-padding *2
 }
