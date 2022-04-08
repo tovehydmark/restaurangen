@@ -23,13 +23,13 @@ interface IPrintBookingsProps {
 export function PrintBookings(props: IPrintBookingsProps) {
   return (
     <>
-      <tr>
+      {/* <tr>
         <td>Bokningsid:{props.bookingDetails.id}</td>
         <td>Datum: {props.bookingDetails.date}</td>
         <td>Tid: {props.bookingDetails.time}</td>
         <td> Antal gäster: {props.bookingDetails.numberOfGuests}</td>
         <td>Kundid: {props.bookingDetails.customerId}</td>
-      </tr>
+      </tr> */}
     </>
   );
 }
