@@ -8,15 +8,6 @@ export const Nav = styled.nav`
   height: 70px;
 `;
 
-export const Li = styled.li`
-  list-style-type: none;
-  /* padding-left: 10px; */
-  Link {
-    display: flex;
-    flex-direction: row;
-  }
-`;
-
 const HamburgerContainer = styled.div`
   display: none;
   @media (max-width: 767px) {
@@ -86,9 +77,9 @@ export function Header() {
           <li>
             <Link to="/Booking">Boka bord</Link>
           </li>
-          <Li>
+          <li>
             <Link to="Menu">Meny</Link>
-          </Li>
+          </li>
         </Ul>
         <HamburgerContainer onClick={toggleHamburger}>
           <HamburgerMenu></HamburgerMenu>
