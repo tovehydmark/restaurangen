@@ -32,3 +32,6 @@ export function HamburgerMenu() {
     </>
   );
 }
+
+// Använde denna som guide när jag gjorde hamburgermenyn. Finns info om hur man animerar till ett kryss där som vi kan göra när vi stylear mer sen
+// https://khuang159.medium.com/creating-a-hamburger-menu-in-react-f22e5ae442cb
