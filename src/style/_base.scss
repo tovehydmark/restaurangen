@@ -35,23 +35,19 @@ footer {
 }
 
 
-.flexxx {
+.showBookings {
     display: flex;
-    width: 100%;
-    background-color: lightcyan;
-
 }
 
-.booking {
-
+.bookingDetails {
     display: flex;
     flex-direction: row;
-    background-color: lightblue;
-}
+    justify-content: space-between;
+    align-items: center;
 
-.customer {
+    ul {
+        list-style: none;
+        text-align: left;
+    }
 
-    display: flex;
-    flex-direction: row;
-    background-color: lightgrey;
 }

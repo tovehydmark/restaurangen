@@ -43,15 +43,15 @@ export function Admin() {
   const [customerInfo, setCustomerInfo] = useState([
     {
       id: "333333333",
-      name: "Franzén",
-      lastname: "Sebastian",
+      name: "Esty",
+      lastname: "Alvarez",
       email: "someone@somedomain.com",
       phone: "070-1112233",
     },
     {
       id: "6666666",
-      name: "Hydmark",
-      lastname: "Tove",
+      name: "Tove",
+      lastname: "Hydmark",
       email: "evot@kramdyh.se",
       phone: "070-0000000",
     },
@@ -70,10 +70,13 @@ export function Admin() {
 
   let bookingInformation = bookingInfo.map((booking, i) => {
     return (
-      <div key={i} className="booking">
+      <div key={i} className="bookingDetails">
         <ul>
           <li>Bokningsid: {booking.id}</li>
+          <li>Kundid: {booking.customerId}</li>
           <li>Datum: {booking.date}</li>
+          <li>Tid: {booking.time}</li>
+          <li>Antal gäster: {booking.numberOfGuests}</li>
         </ul>
         <button>Ändra kunduppgifter</button>
       </div>
@@ -82,22 +85,33 @@ export function Admin() {
 
   let customerInformation = customerInfo.map((customer, i) => {
     return (
-      <div key={i} className="customer">
+      <div key={i} className="bookingDetails">
         <ul>
-          <li>Kundid: {customer.id}</li>
-          <li>Efternamn: {customer.name}</li>
+          <li>Bokningsid: {customer.id}</li>
+          <li>Namn: {customer.name}</li>
+          <li>Efternamn: {customer.lastname}</li>
+          <li>Email: {customer.email}</li>
+          <li>Telefon: {customer.phone}</li>
         </ul>
-        <button>Ändra bokning</button>
-        <button>Radera bokning</button>
+        <div className="buttonPosition">
+          <button>Ändra bokning</button>
+          <button>Radera bokning</button>
+        </div>
       </div>
     );
   });
 
   return (
-    <div className="flexxx">
-      <div>{bookingInformation}</div>
-      <div>{customerInformation}</div>
-    </div>
+    <section className="showBookings">
+      <div>
+        <p>Bokningsinformation</p>
+        {bookingInformation}
+      </div>
+      <div>
+        <p>Kunduppgifter</p>
+        {customerInformation}
+      </div>
+    </section>
   );
 }
 
