@@ -79,6 +79,7 @@ export function Admin() {
           Tid: {booking.time}
           Antal gäster: {booking.numberOfGuests}
           Kundid: {booking.customerId}
+          <button>Ändra</button>
         </td>
       );
     }
@@ -92,12 +93,12 @@ export function Admin() {
           Förnamn: {customer.name}
           Efternamn: {customer.lastname}
           Email: {customer.email}
+          <button>Ändra</button>
+          <button>Ta bort</button>
         </td>
       );
     }
   );
-
-  //Får problem med layouten när jag vill ha en knapp i tabellen. Kommer nog göra en styled div och använda istället för tabell, tror det blir enklare så
 
   return (
     <>
