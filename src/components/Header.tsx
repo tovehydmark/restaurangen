@@ -36,6 +36,17 @@ export function Header() {
     margin: 20px 0;
     padding: 0 25px;
     display: ${hamburgerOpen ? "inline" : "none"};
+    list-style: none;
+    font-size: 1.5rem;
+
+    a {
+      color: white;
+      text-decoration: none;
+
+      :hover {
+        text-decoration: underline;
+      }
+    }
 
     @media (max-width: 767px) {
       position: absolute;
@@ -45,26 +56,20 @@ export function Header() {
       width: 100%;
       margin-top: 70px;
       background-color: rgba(0, 79, 74, 0.9);
-      font-size: 2rem;
-      list-style: none;
 
       li {
         margin: 30px;
-      }
-
-      a {
-        color: white;
-        text-decoration: none;
-
-        :hover {
-          text-decoration: underline;
-        }
       }
     }
 
     //La detta här för att nav ska synas även när man breddar skärmen oavsett om hamburgerOpen är true eller false
     @media (min-width: 768px) {
-      display: ${hamburgerOpen ? "inline" : "inline"};
+      display: ${hamburgerOpen ? "flex" : "flex"};
+      flex-direction: row;
+      a {
+        color: black; //Ändra detta när bg-color är satt i headern
+        margin-right: 30px;
+      }
     }
   `;
   return (
@@ -72,7 +77,6 @@ export function Header() {
       <Nav className="navigation">
         <Ul onClick={toggleHamburger}>
           <li>
-            {" "}
             <Link to="/">The Codfather</Link>
           </li>
 
