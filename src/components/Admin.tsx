@@ -1,6 +1,5 @@
 import "../style/style.scss";
 import { useEffect, useState } from "react";
-import { PrintBookings } from "./PrintBookings";
 
 interface ICustomerInformation {
   id: string;
