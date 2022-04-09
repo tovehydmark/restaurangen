@@ -8,29 +8,22 @@ export const Nav = styled.nav`
   height: 70px;
 `;
 
-export const Ul = styled.ul`
-  display: flex;
-  flex-wrap: wrap;
-  float: left;
-  margin: 20px 0;
-  padding: 0 25px;
-`;
-
 export const Li = styled.li`
   list-style-type: none;
   padding-left: 10px;
 `;
 
-//Created all these styled components as I did not want to do anything in the css file like I accidently did before...
-export const HamburgerContainer = styled.div`
+const HamburgerContainer = styled.div`
   display: none;
   @media (max-width: 767px) {
     display: fixed;
-    padding-top: 1rem;
-    margin-right: 1rem;
+    top: 0;
+    right: 0;
     z-index: 10;
   }
 `;
+
+//Created all these styled components as I did not want to do anything in the css file like I accidently did before...
 
 export function Header() {
   const [hamburgerOpen, setHamburgerOpen] = useState(false);
@@ -39,6 +32,27 @@ export function Header() {
     setHamburgerOpen(!hamburgerOpen);
     console.log(hamburgerOpen);
   }
+
+  //Styled components bör inte ligga inuti en komponent såhär, får upp varningar. Lät den ligga för tillfället eftersom jag behövde toggle-funktionen för display och den hittades inte om jag la Ul utanför
+
+  const Ul = styled.ul`
+    display: flex;
+    flex-wrap: wrap;
+    float: right;
+    margin: 20px 0;
+    padding: 0 25px;
+
+    display: ${hamburgerOpen ? "inline" : "none"};
+
+    @media (max-width: 767px) {
+      background-color: lightblue;
+      height: 100vh;
+      z-index: 100;
+      width: 70vw;
+      /* margin-top: 50px; */
+      position: absolute;
+    }
+  `;
   return (
     <header>
       <Nav className="navigation">
