@@ -12,6 +12,7 @@ const HamburgerContainer = styled.div`
   display: none;
   @media (max-width: 767px) {
     display: fixed;
+    margin: 16px 0 0 8px;
     /* top: 0; //Lägger sig fortfarande till vänster, vet ej varför
     right: 0; */
     z-index: 10;
@@ -42,7 +43,7 @@ export function Header() {
       z-index: 10;
       height: 100vh;
       width: 100%;
-      margin-top: 30px;
+      margin-top: 70px;
       background-color: rgba(0, 79, 74, 0.9);
       font-size: 2rem;
       list-style: none;
@@ -59,6 +60,11 @@ export function Header() {
           text-decoration: underline;
         }
       }
+    }
+
+    //La detta här för att nav ska synas även när man breddar skärmen oavsett om hamburgerOpen är true eller false
+    @media (min-width: 768px) {
+      display: ${hamburgerOpen ? "inline" : "inline"};
     }
   `;
   return (
