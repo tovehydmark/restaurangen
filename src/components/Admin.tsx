@@ -32,7 +32,7 @@ export function Admin() {
     {
       id: "6666666",
       restaurantId: "623b85d54396b96c57bde7c3",
-      date: "2022-01-01",
+      date: "2022-01-05",
       time: "18:00",
       numberOfGuests: 4,
       customerId: "623b85d54396b96c57bde7c3",
@@ -60,7 +60,6 @@ export function Admin() {
   //Uppdaterar booking info-listan
   useEffect(() => {
     setBookingInfo([...bookingInfo]);
-    console.log(bookingInfo);
   }, []);
 
   //Uppdaterar kund-listan
@@ -69,51 +68,97 @@ export function Admin() {
     // console.log(customerInfo);
   }, []);
 
-  //Kan man kanske skapa en ny lista som man pushar
-  let bookingInformation = bookingInfo.map(
-    (booking: IBookingInformation, i) => {
-      return (
-        <td key={i} className="tableRowToFlex">
-          Bokningsid: {booking.id}
-          Datum: {booking.date}
-          Tid: {booking.time}
-          Antal gäster: {booking.numberOfGuests}
-          Kundid: {booking.customerId}
-          <button>Ändra</button>
-        </td>
-      );
-    }
-  );
+  let bookingInformation = bookingInfo.map((booking, i) => {
+    return (
+      <div key={i} className="booking">
+        <ul>
+          <li>Bokningsid: {booking.id}</li>
+          <li>Datum: {booking.date}</li>
+        </ul>
+        <button>Ändra kunduppgifter</button>
+      </div>
+    );
+  });
 
-  let customerInformation = customerInfo.map(
-    (customer: ICustomerInformation, i) => {
-      return (
-        <td key={i} className="tableRowToFlex">
-          Kundid: {customer.id}
-          Förnamn: {customer.name}
-          Efternamn: {customer.lastname}
-          Email: {customer.email}
-          <button>Ändra</button>
-          <button>Ta bort</button>
-        </td>
-      );
-    }
-  );
+  let customerInformation = customerInfo.map((customer, i) => {
+    return (
+      <div key={i} className="customer">
+        <ul>
+          <li>Kundid: {customer.id}</li>
+          <li>Efternamn: {customer.name}</li>
+        </ul>
+        <button>Ändra bokning</button>
+        <button>Radera bokning</button>
+      </div>
+    );
+  });
 
   return (
-    <>
-      <table className="tableBookingCustomerDetails">
-        <tbody>
-          <tr>
-            <th>Bokningsinfo</th>
-            <th>Kundinfo</th>
-            <th>Radera bokning</th>
-          </tr>
-
-          <tr>{bookingInformation}</tr>
-          <tr>{customerInformation}</tr>
-        </tbody>
-      </table>
-    </>
+    <div className="flexxx">
+      <div>{bookingInformation}</div>
+      <div>{customerInformation}</div>
+    </div>
   );
 }
+
+//Halvdan lösning med tabell. Valde att göra divar med listor istället då jag inte kom på något sätt att få in datan från två olika listor i samma tabell utan att skapa nya table-rows (så att bara första table-headern fick info).
+
+// let bookingInformation = bookingInfo.map(
+//   (booking: IBookingInformation, i) => {
+//     return (
+//       <td key={i} className="tableRowToFlex">
+//         Bokningsid: {booking.id}
+//         Datum: {booking.date}
+//         Tid: {booking.time}
+//         Antal gäster: {booking.numberOfGuests}
+//         Kundid: {booking.customerId}
+//         <button>Ändra</button>
+//       </td>
+//     );
+//   }
+// );
+
+// let customerInformation = customerInfo.map(
+//   (customer: ICustomerInformation, i) => {
+//     return (
+//       <td key={i} className="tableRowToFlex">
+//         Kundid: {customer.id}
+//         Förnamn: {customer.name}
+//         Efternamn: {customer.lastname}
+//         Email: {customer.email}
+//         <button>Ändra</button>
+//         <button>Ta bort</button>
+//       </td>
+//     );
+//   }
+// );
+
+// <table>
+//         <tbody className="bookingDetailsTable">
+//           <tr>
+//             <th>Bokningsinfo</th>
+//             <th>Kundinfo</th>
+//             <th>Radera bokning</th>
+//           </tr>
+
+//           <tr>
+//             <td>bokningsinfo</td>
+//             <td>kundinfo</td>
+//             <td>
+//               <button>hej</button>
+//             </td>
+//           </tr>
+
+//           <tr>
+//             {bookingInformation} {customerInformation} <button>Radera bokning</button>
+//           </tr>
+
+//Denna under funkar men inte den över då den skapar en ny td för varje kund och lägger in på en lång rad i tr ovan.
+//           <tr>
+//             <td>hej</td>
+//             <td>på</td>
+//             <td>dig</td>
+//           </tr>
+
+//         </tbody>
+//       </table>
