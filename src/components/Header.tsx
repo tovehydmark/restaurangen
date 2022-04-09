@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
+import { HamburgerMenu } from "./styledComponents/HamburgerMenu";
 
 export function Header() {
   return (
     <header>
-      <nav>
+      <nav className="navigation">
         <ul>
           <li>
             <Link to="/">The Codfather</Link>
@@ -12,6 +13,7 @@ export function Header() {
             <Link to="Menu">Meny</Link>
           </li>
         </ul>
+        <HamburgerMenu></HamburgerMenu>
       </nav>
     </header>
   );
