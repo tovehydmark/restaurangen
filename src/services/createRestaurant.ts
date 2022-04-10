@@ -16,6 +16,8 @@ export function createRestaurant() {
 }
 
 //RestaurangID
+//Vi använder oss av id:t som slutar på 15! (Råkade skapa ett till senare)
+
 // 624c1940850953b8ad161715
 
-// 624c1940850953b8ad161716
+//https://school-restaurant-api.azurewebsites.net/restaurant/624c1940850953b8ad161715
