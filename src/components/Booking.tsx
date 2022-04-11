@@ -1,7 +1,8 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import Calendar from "react-calendar"
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message"
+import axios from "axios";
 // Skrev in interface här sålänge, men kanske kan vara värt att ha en modelsmapp med interfaces?
 interface INewUser {
   firstname: string;
@@ -11,7 +12,7 @@ interface INewUser {
 }
 
 interface INewBookning {
-  resturantId: string;
+  restaurantId: string;
   date: string;
   time: string;
   numberOfGuests: string;
@@ -23,18 +24,49 @@ interface IFormInputs {
   lastname: string;
   email: string;
   phonenumber: string;
+  GDPR: boolean;
+}
+
+interface IBookings {
+  id: string;
+  restaurantId: string;
+  date: string;
+  time: string;
+  numberOfGuests: string;
+  customerId: string;
+}
+
+class Bookings {
+  constructor(public date: string, public time: string, public numberOfGuests: string){}
 }
 
 export function Booking() {
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
   const [numberOfGuests, setNumberOfGuests] = useState('');
-  const [newUser, setNewUser] = useState<INewUser>({
-    firstname: "",
-    lastname: "",
-    email:"",
-    phonenumber: ""
-  })
+  // const [newUser, setNewUser] = useState<INewUser>({
+  //   firstname: "",
+  //   lastname: "",
+  //   email:"",
+  //   phonenumber: ""
+  // })
+  const [bookings, setBookings] = useState<Bookings[]>([]);
+
+  useEffect(() => {
+    axios.get<IBookings[]>('https://school-restaurant-api.azurewebsites.net/booking/restaurant/' + resId)
+    .then(response => {
+      let bookingsFromAPI = response.data.map((bookings: IBookings) =>{
+        console.log(bookings);
+        
+        return new Bookings(bookings.date, bookings.time, bookings.numberOfGuests)
+      });
+      setBookings(bookingsFromAPI)
+    });
+  }, []);
+  
+console.log(bookings);
+
+
 
   //React-form-hook tar emot data från inputfält vid submit
   const {
@@ -45,7 +77,9 @@ export function Booking() {
     criteriaMode: "all"
   });
   
-  let newBooking: INewBookning = {resturantId:'', date:'', time:'', numberOfGuests:'', customer: newUser};
+  
+  let resId = "624c1940850953b8ad161715";
+  let newBooking: INewBookning = {restaurantId:'', date:'', time:'', numberOfGuests:'', customer: {firstname:'', lastname:'', email: '', phonenumber: ''}};
   let yearToString = '';
   let monthToString = '';
   let dayToString = '';
@@ -88,10 +122,10 @@ export function Booking() {
   dateToString(todaysDate)
 
   //Skapar en ny användare genom att hämta värden från formulär
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    let name = e.target.name;
-    setNewUser({...newUser, [name]: e.target.value})
-  }
+  // const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  //   let name = e.target.name;
+  //   setNewUser({...newUser, [name]: e.target.value})
+  // }
 
   //Kontrollerar och uppdaterar vald tid för bokning
   const setTimeChecked = (e: ChangeEvent<HTMLInputElement>) => {
@@ -111,11 +145,15 @@ export function Booking() {
   }
   //Kontrollerar och uppdaterar användaren, skapar objekt för ny bokning som ska skickas till API
   const onSubmit = (user: IFormInputs) => {
-    setNewUser(user)
-    newBooking = {resturantId:"624c1940850953b8ad161715", date:date, time:time, numberOfGuests: numberOfGuests, customer: user};
-    console.log(newBooking);
-    console.log(newUser);
-  };
+    newBooking = {restaurantId:resId, date:date, time:time, numberOfGuests: numberOfGuests, customer: user};
+    sendBooking(newBooking);
+  }
+
+  function sendBooking(createBooking:INewBookning) {
+    console.log(createBooking);
+    
+    axios.post('https://school-restaurant-api.azurewebsites.net/booking/create', createBooking).then(response => {console.log(response.data)});
+  }
     
   return <div className="bookingDiv">
     <form className="bookingSearchForm">
@@ -250,7 +288,20 @@ export function Booking() {
 
       <div className="gdpr">
       <label htmlFor="GDPR">Jag godkänner att The Codfather får lagra och använda mina personuppgifter enligt GDPR</label>
-      <input required name="GDPR" type="checkbox"/>
+      <input type="checkbox" {...register("GDPR", {
+        required: "Du måste godkänna hantering av personuppgifter för att kunna boka"
+      })}/>
+      <ErrorMessage
+              errors={errors}
+              name="GDPR"
+              render={({ messages }) => {
+                console.log("messages", messages);
+                return messages
+                  ? Object.entries(messages).map(([type, message]) => (
+                      <p className="errorMessage" key={type}>{message}</p>
+                    ))
+                  : null;
+              }}/>
       </div>
       
       <input className="bookingBtn" type="submit" />
