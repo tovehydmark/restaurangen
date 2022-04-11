@@ -1,0 +1,13 @@
+.menuContainer {
+    display: flex;
+    flex-direction: row;
+    text-align: left;
+    justify-content: center;
+    gap: 10rem;
+
+    .menuList {
+        width: 260px;
+        padding: $base-padding;
+        
+    }
+}
