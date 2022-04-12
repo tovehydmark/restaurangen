@@ -1,4 +1,3 @@
-c;
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -108,31 +107,3 @@ export function Contact() {
     //  this.setState({ address });})
     console.log(res)}
   },[]) */
-
-/*
-   let bookingInformation = bookingInfo.map((booking, i) => {
-    return (
-      <div key={i} className="bookingDetails">
-        <ul>
-          <li>Bokningsid: {booking.id}</li>
-          <li>Kundid: {booking.customerId}</li>
-          <li>Datum: {booking.date}</li>
-          <li>Tid: {booking.time}</li>
-          <li>Antal gäster: {booking.numberOfGuests}</li>
-        </ul>
-        <button>Ändra kunduppgifter</button>
-      </div>
-    );
-  });
-  */
-/*
-  let addressInfo = address.map((address, i) =>{
-    return (
-      <div key={i}>
-        <ul>
-          <li>{address.name}</li>
-        </ul>
-      </div>
-    )
-  })
-*/

@@ -1,23 +1,6 @@
 import "../style/style.scss";
 import { useEffect, useState } from "react";
 
-interface ICustomerInformation {
-  id: string;
-  name: string;
-  lastname: string;
-  email: string;
-  phone: string; //"070-1112233"
-}
-
-interface IBookingInformation {
-  id: string;
-  restaurantId: string;
-  date: string; //"2022-01-01"
-  time: string; //"18:00"
-  numberOfGuests: number;
-  customerId: string;
-}
-
 export function Admin() {
   //Booking info måste hämtas och sparas i en lista som vi mappar igenom. Detta bara placeholder
   const [bookingInfo, setBookingInfo] = useState([
