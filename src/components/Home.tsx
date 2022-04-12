@@ -1,6 +1,5 @@
 import "../style/style.scss";
 import styled, { keyframes } from "styled-components";
-
 // import { createRestaurant } from "../services/createRestaurant";
 import fishImg from "../images/fishfood.jpg";
 import seafoodImg from "../images/seafood.jpg";
@@ -8,29 +7,23 @@ import tableImg from "../images/table.jpg";
 
 // STYLING (fixa keyframes sist) //
 const changeBg = keyframes`
-    0%{right: 0px;}
-    10%{right: 0px;}
-    20%{right: 1200px;}
-    30%{right: 1200px}
-    40%{right: 2400px;}
-    50%{right: 2400px;}
-    60%{right: 1200px}
-    70%{right: 1200px;}
-    80%{right: 0px;}
-    90%{right: 0px;}
-    100%{right: 0px}
+    0%, 10% {right: 0px;}
+    20%, 30% {right: 1440px;}
+    40%, 50% {right: 2880px;}
+    60%, 70%  {right: 1440;}
+    80%, 90%, 100% {right: 0px;}
 `;
 //kan flytta dessa till styled mapp när vi fått det att funka
 export const Image = styled.img`
   position: relative;
-  width: 3600px;
-  height: 800px;
-  animation: ${changeBg} 33s ease infinite running;
+  width: 1440px;
+  animation: ${changeBg} 33s ease infinite;
 `;
 export const DivImg = styled.div`
   display: flex;
   overflow: hidden;
-  height: 800px;
+  margin-top: 3rem;
+  width: 4320px;
 `;
 //flytta till egen fil?
 const imageSlides = [
@@ -49,7 +42,7 @@ export function Home() {
           return <Image key={i} src={slide.image} alt="dining photos"></Image>;
         })}
       </DivImg>
-      <section>
+      <section className="startpageTextContainer">
         <h2>The CodFather</h2>
         <p>
           Blue gourami olive flounder dwarf gourami mummichog Blind shark
