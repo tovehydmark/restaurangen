@@ -32,8 +32,8 @@ export function Contact() {
     getAddress(address);
   }, []);
 
-  console.log([address);
   
+    
   let contactInformation = address 
 
   return (
