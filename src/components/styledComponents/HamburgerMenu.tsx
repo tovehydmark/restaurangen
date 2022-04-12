@@ -7,6 +7,7 @@ export const HamburgerDiv = styled.div`
   justify-content: space-around;
   flex-flow: column nowrap;
   z-index: 10;
+
   /* display: none; */
 `;
 

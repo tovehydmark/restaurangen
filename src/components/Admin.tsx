@@ -1,43 +1,15 @@
 import "../style/style.scss";
 import { useEffect, useState } from "react";
-
-interface ICustomerInformation {
-  id: string;
-  name: string;
-  lastname: string;
-  email: string;
-  phone: string; //"070-1112233"
-}
-
-interface IBookingInformation {
-  id: string;
-  restaurantId: string;
-  date: string; //"2022-01-01"
-  time: string; //"18:00"
-  numberOfGuests: number;
-  customerId: string;
-}
+import axios from "axios";
+import { IBookingInformation } from "../models/IBookingInformation";
+import { resId } from "./Booking";
+import { ICustomerInformation } from "../models/ICustomerInformation";
 
 export function Admin() {
   //Booking info måste hämtas och sparas i en lista som vi mappar igenom. Detta bara placeholder
-  const [bookingInfo, setBookingInfo] = useState([
-    {
-      id: "333333333",
-      restaurantId: "623b85d54396b96c57bde7c3",
-      date: "2022-01-01",
-      time: "18:00",
-      numberOfGuests: 4,
-      customerId: "623b85d54396b96c57bde7c3",
-    },
-    {
-      id: "6666666",
-      restaurantId: "623b85d54396b96c57bde7c3",
-      date: "2022-01-05",
-      time: "18:00",
-      numberOfGuests: 4,
-      customerId: "623b85d54396b96c57bde7c3",
-    },
-  ]);
+
+  const [booking, setBooking] = useState<IBookingInformation[]>([]);
+  const [customer, setCustomer] = useState<ICustomerInformation[]>([]);
 
   //Samma med customer info
   const [customerInfo, setCustomerInfo] = useState([
@@ -57,22 +29,50 @@ export function Admin() {
     },
   ]);
 
-  //Uppdaterar booking info-listan
   useEffect(() => {
-    setBookingInfo([...bookingInfo]);
+    axios
+      .get<IBookingInformation[]>(
+        "https://school-restaurant-api.azurewebsites.net/booking/restaurant/" +
+          resId
+      )
+      .then((response) => {
+        console.log(response);
+
+        setBooking(response.data);
+      });
   }, []);
 
-  //Uppdaterar kund-listan
-  useEffect(() => {
-    setCustomerInfo([...customerInfo]);
-    // console.log(customerInfo);
-  }, []);
+  console.log(booking);
 
-  let bookingInformation = bookingInfo.map((booking, i) => {
+  // useEffect(() => {
+  //   axios
+  //     .get<ICustomerInformation[]>(
+  //       "https://school-restaurant-api.azurewebsites.net/customer/" +
+  //         "CUSTOMERID"
+  //     )
+  //     .then((response) => {
+  //       console.log(response);
+
+  //       setCustomer(response.data);
+  //     });
+  // }, []);
+
+  // //Uppdaterar booking info-listan
+  // useEffect(() => {
+  //   setBookingInfo([...bookingInfo]);
+  // }, []);
+
+  // //Uppdaterar kund-listan
+  // useEffect(() => {
+  //   setCustomerInfo([...customerInfo]);
+  //   // console.log(customerInfo);
+  // }, []);
+
+  let bookingInformation = booking.map((booking, i) => {
     return (
       <div key={i} className="bookingDetails">
         <ul>
-          <li>Bokningsid: {booking.id}</li>
+          <li>Bokningsid: {booking._id}</li>
           <li>Kundid: {booking.customerId}</li>
           <li>Datum: {booking.date}</li>
           <li>Tid: {booking.time}</li>

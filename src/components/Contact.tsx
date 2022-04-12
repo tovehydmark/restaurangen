@@ -1,62 +1,53 @@
-import "../style/style.scss";
 import axios from "axios";
 import { useEffect, useState } from "react";
-
-
-
 
 //[{"_id":"624c1940850953b8ad161715","name":"The Codfather","address":"Laxgatan 14","zip":"13579","city":"Torskhamn"}]
 
 interface IContactInformation {
-  _id:string;
-  name:string;
-  address:string;
-  zip:number;
-  city:string;
-  }
-
+  _id: string;
+  name: string;
+  address: string;
+  zip: number;
+  city: string;
+}
 
 export function Contact() {
-
-  const [address, getAddress] = useState<IContactInformation>()
+  const [address, getAddress] = useState<IContactInformation>();
   useEffect(() => {
-    axios.get(`https://school-restaurant-api.azurewebsites.net/restaurant/624c1940850953b8ad161715`).then(res=>{
-    
-    getAddress(res.data)
-    //console.log(res.data)
-    //console.log()
-     })
+    axios
+      .get(
+        `https://school-restaurant-api.azurewebsites.net/restaurant/624c1940850953b8ad161715`
+      )
+      .then((res) => {
+        getAddress(res.data);
+        //console.log(res.data)
+        //console.log()
+      });
   }, []);
 
   useEffect(() => {
     getAddress(address);
   }, []);
 
-  
-    
-  let contactInformation = address 
+  let contactInformation = address;
 
   return (
     <section>
+      <ul>
+        <li>{address?.city}</li>
+      </ul>
 
-    <ul>
-      <li>{address?.city}</li>
-    </ul>
-
-    <h4>Öppettider:</h4>
-    <article>
-      <p>
-        
-        Mån-Tors: 11.00 - 22.00
-        <br />
-        Fre-Sön: 11.00 - 23.00
-      </p>
-    </article>
-  </section>
-   
+      <h4>Öppettider:</h4>
+      <article>
+        <p>
+          Mån-Tors: 11.00 - 22.00
+          <br />
+          Fre-Sön: 11.00 - 23.00
+        </p>
+      </article>
+    </section>
   );
 }
-
 
 /*
 
@@ -95,8 +86,7 @@ export function Contact() {
   </section>
   */
 
-
-  /*
+/*
   const [loading, setLoading] = useState<boolean>(false);
     const [address, getAddress] = useState<InterfaceAddress>()
   useEffect(() => {
@@ -110,38 +100,10 @@ export function Contact() {
   }, [])
   */
 
-   /* useEffect(() => {
+/* useEffect(() => {
     axios.get(`https://school-restaurant-api.azurewebsites.net/restaurant/624c1940850953b8ad161715`)
     .then(res => {
       const address = res.data;
     //  this.setState({ address });})
     console.log(res)}
   },[]) */
-
-  /*
-   let bookingInformation = bookingInfo.map((booking, i) => {
-    return (
-      <div key={i} className="bookingDetails">
-        <ul>
-          <li>Bokningsid: {booking.id}</li>
-          <li>Kundid: {booking.customerId}</li>
-          <li>Datum: {booking.date}</li>
-          <li>Tid: {booking.time}</li>
-          <li>Antal gäster: {booking.numberOfGuests}</li>
-        </ul>
-        <button>Ändra kunduppgifter</button>
-      </div>
-    );
-  });
-  */
-/*
-  let addressInfo = address.map((address, i) =>{
-    return (
-      <div key={i}>
-        <ul>
-          <li>{address.name}</li>
-        </ul>
-      </div>
-    )
-  })
-*/
