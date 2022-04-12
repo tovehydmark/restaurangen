@@ -3,30 +3,13 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { IBookingInformation } from "../models/IBookingInformation";
 import { resId } from "./Booking";
+import { ICustomerInformation } from "../models/ICustomerInformation";
 
 export function Admin() {
   //Booking info måste hämtas och sparas i en lista som vi mappar igenom. Detta bara placeholder
 
   const [booking, setBooking] = useState<IBookingInformation[]>([]);
-
-  const [bookingInfo, setBookingInfo] = useState([
-    {
-      id: "333333333",
-      restaurantId: "623b85d54396b96c57bde7c3",
-      date: "2022-01-01",
-      time: "18:00",
-      numberOfGuests: 4,
-      customerId: "623b85d54396b96c57bde7c3",
-    },
-    {
-      id: "6666666",
-      restaurantId: "623b85d54396b96c57bde7c3",
-      date: "2022-01-05",
-      time: "18:00",
-      numberOfGuests: 4,
-      customerId: "623b85d54396b96c57bde7c3",
-    },
-  ]);
+  const [customer, setCustomer] = useState<ICustomerInformation[]>([]);
 
   //Samma med customer info
   const [customerInfo, setCustomerInfo] = useState([
@@ -58,6 +41,21 @@ export function Admin() {
         setBooking(response.data);
       });
   }, []);
+
+  console.log(booking);
+
+  // useEffect(() => {
+  //   axios
+  //     .get<ICustomerInformation[]>(
+  //       "https://school-restaurant-api.azurewebsites.net/customer/" +
+  //         "CUSTOMERID"
+  //     )
+  //     .then((response) => {
+  //       console.log(response);
+
+  //       setCustomer(response.data);
+  //     });
+  // }, []);
 
   // //Uppdaterar booking info-listan
   // useEffect(() => {

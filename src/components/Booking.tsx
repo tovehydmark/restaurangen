@@ -8,7 +8,6 @@ import { INewBooking } from "../models/INewBooking";
 import { IFormInputs } from "../models/IFormInputs";
 import { IBookings } from "../models/IBookings";
 import { Bookings } from "../models/Bookings";
-// Skrev in interface här sålänge, men kanske kan vara värt att ha en modelsmapp med interfaces?
 
 export let resId = "624c1940850953b8ad161715";
 
