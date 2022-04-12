@@ -1,8 +1,14 @@
 import "../style/style.scss";
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { IBookingInformation } from "../models/IBookingInformation";
+import { resId } from "./Booking";
 
 export function Admin() {
   //Booking info måste hämtas och sparas i en lista som vi mappar igenom. Detta bara placeholder
+
+  const [booking, setBooking] = useState<IBookingInformation[]>([]);
+
   const [bookingInfo, setBookingInfo] = useState([
     {
       id: "333333333",
@@ -40,22 +46,35 @@ export function Admin() {
     },
   ]);
 
-  //Uppdaterar booking info-listan
   useEffect(() => {
-    setBookingInfo([...bookingInfo]);
+    axios
+      .get<IBookingInformation[]>(
+        "https://school-restaurant-api.azurewebsites.net/booking/restaurant/" +
+          resId
+      )
+      .then((response) => {
+        console.log(response);
+
+        setBooking(response.data);
+      });
   }, []);
 
-  //Uppdaterar kund-listan
-  useEffect(() => {
-    setCustomerInfo([...customerInfo]);
-    // console.log(customerInfo);
-  }, []);
+  // //Uppdaterar booking info-listan
+  // useEffect(() => {
+  //   setBookingInfo([...bookingInfo]);
+  // }, []);
 
-  let bookingInformation = bookingInfo.map((booking, i) => {
+  // //Uppdaterar kund-listan
+  // useEffect(() => {
+  //   setCustomerInfo([...customerInfo]);
+  //   // console.log(customerInfo);
+  // }, []);
+
+  let bookingInformation = booking.map((booking, i) => {
     return (
       <div key={i} className="bookingDetails">
         <ul>
-          <li>Bokningsid: {booking.id}</li>
+          <li>Bokningsid: {booking._id}</li>
           <li>Kundid: {booking.customerId}</li>
           <li>Datum: {booking.date}</li>
           <li>Tid: {booking.time}</li>

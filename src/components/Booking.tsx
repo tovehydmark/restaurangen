@@ -10,6 +10,8 @@ import { IBookings } from "../models/IBookings";
 import { Bookings } from "../models/Bookings";
 // Skrev in interface här sålänge, men kanske kan vara värt att ha en modelsmapp med interfaces?
 
+export let resId = "624c1940850953b8ad161715";
+
 export function Booking() {
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
@@ -53,7 +55,6 @@ export function Booking() {
     criteriaMode: "all",
   });
 
-  let resId = "624c1940850953b8ad161715";
   let newBooking: INewBooking = {
     restaurantId: "",
     date: "",
