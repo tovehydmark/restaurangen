@@ -30,9 +30,6 @@ import { FetchBookings } from "../models/FetchBookings";
 
 //Nu skriver den ut bokningar + kunder i rätt antal UTAN react.StrictMode!
 
-//Eftersom looparna inte hänger ihop måste vi prova att filtrera resultaten utefter kund-id och se att vi får ut rätt bokningar vid rätt kund. Viktigt också för att se att vi faktiskt skriver ut rätt kunder och att den inte fått flip.
-//Därför måste vi få in att hämta kund-id från bokningen
-
 export function Admin() {
   const [booking, setBooking] = useState<IBookingInformation[]>([]);
   // const [customer, setCustomer] = useState<ICustomerInformation[]>([]);
