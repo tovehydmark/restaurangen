@@ -10,7 +10,9 @@ export function Layout() {
         <Outlet></Outlet>
       </main>
       <footer>
-        <p>
+        <p className="footerPhone">070 123 45 67</p>
+
+        <p className="footerOpenHours">
           Öppettider:
           <br />
           Mån-Tors: 11.00 - 22.00
@@ -18,8 +20,12 @@ export function Layout() {
           Fre-Sön: 11.00 - 23.00
         </p>
 
-        <a href="#">Facebook</a>
-        <a href="#">Instagram</a>
+        <a href="#" className="footerFacebook">
+          Facebook
+        </a>
+        <a href="#" className="footerInstagram">
+          Instagram
+        </a>
       </footer>
     </>
   );

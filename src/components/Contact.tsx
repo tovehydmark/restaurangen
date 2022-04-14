@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-
 export function Contact() {
   const [getAddress, setGetAddress] = useState<any[]>([]);
 
@@ -18,31 +17,26 @@ export function Contact() {
     fetchAddress();
   }, []);
 
-  
   return (
     <div>
       <h2>Kontakt</h2>
       {getAddress.map((address) => (
-        
         <div>
-        <ul>
-          <li>{address.address}</li>
-          <li>{address.zip}</li>
-          <li>{address.city}</li>
-        </ul>
-        <div>Telefon: 070 123 45 67</div>
-        <p>
-       Öppettider:
-       <br />
-       Mån-Tors: 11.00 - 22.00
-        <br />
-        Fre-Sön: 11.00 - 23.00
-     </p>
+          <p>
+            {address.address}
+            <br />
+            {address.zip}
+            <br />
+            {address.city}
+            <br />
+            Telefon: 070 123 45 67 Öppettider:
+            <br />
+            Mån-Tors: 11.00 - 22.00
+            <br />
+            Fre-Sön: 11.00 - 23.00
+          </p>
         </div>
-        
       ))}
     </div>
   );
-    
 }
-

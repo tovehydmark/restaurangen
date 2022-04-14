@@ -12,10 +12,12 @@ header {
     justify-content: center;
     background-color: #00817882;
     height: 105px;
+
 }
 
 // MAIN OUTLET //
 main {
+    height: 100vh;
 
     p {
         font-family: $base-font;
@@ -35,7 +37,78 @@ main {
     }
 }
 
-// MENY SIDAN //
+// STARTSIDAN //
+
+@keyframes changeBg {
+
+    0% {
+        right: 0px;
+    }
+
+    10% {
+        right: 0px;
+    }
+
+    20% {
+        right: 1280px;
+    }
+
+    30% {
+        right: 1280px;
+    }
+
+    40% {
+        right: 2560px;
+    }
+
+    50% {
+        right: 2560px;
+    }
+
+    60% {
+        right: 1280;
+    }
+
+    70% {
+        right: 1280;
+    }
+
+    80% {
+        right: 0px;
+    }
+
+    90% {
+        right: 0px;
+    }
+
+    100% {
+        right: 0px;
+    }
+}
+
+.photoContainer {
+    display: flex;
+    overflow: hidden;
+    margin-top: 3rem;
+    width: 4320px;
+
+
+
+
+    .photos {
+        position: relative;
+        width: 1280px;
+        animation: changeBg 33s ease infinite;
+
+    }
+
+}
+
+.startpageTextContainer {
+    padding: $base-padding $base-padding * 2;
+}
+
+// MENYSIDAN //
 
 .menuContainer {
     margin: 8px * 2;
@@ -43,6 +116,7 @@ main {
     flex-direction: column;
     justify-content: center;
     text-align: left;
+
 
     .menuList {
         padding: $base-padding;
@@ -57,16 +131,17 @@ main {
     }
 }
 
-// BOOKING SIDAN //
+// BOOKINGSIDAN //
 .showBookings {
     display: flex;
 }
 
 .bookingDetails {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+    // display: flex;
+    // flex-direction: column;
+    // flex-wrap: wrap;
+    // justify-content: space-between;
+    // align-items: center;
 
     ul {
         list-style: none;
@@ -77,9 +152,10 @@ main {
 
 .bookingDiv {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: $base-padding * 2;
-    justify-content: center;
+    // justify-content: center;
+    align-items: center;
     padding: $base-padding;
 
     label {
@@ -175,8 +251,13 @@ main {
     }
 }
 
+// ADMINSIDAN //
+
+
+
 // FOOTER //
 footer {
     font-family: $base-font;
     background-color: #00817814;
+
 }
