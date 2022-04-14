@@ -8,34 +8,35 @@ import { INewBooking } from "../models/INewBooking";
 import { IFormInputs } from "../models/IFormInputs";
 import { IBookings } from "../models/IBookings";
 import { Bookings } from "../models/Bookings";
+import { Button } from "./styledComponents/Button";
 
 export let resId = "624c1940850953b8ad161715";
 
-function countTables(listOfbookings: Bookings[]){
+function countTables(listOfbookings: Bookings[]) {
   let bookedTables = 0;
-  for(let i=0; i< listOfbookings.length; i++){
-    bookedTables += Math.floor(Number(listOfbookings[i].numberOfGuests) / 6)
-    if(Number(listOfbookings[i].numberOfGuests) % 6 != 0){
-      bookedTables +=1
+  for (let i = 0; i < listOfbookings.length; i++) {
+    bookedTables += Math.floor(Number(listOfbookings[i].numberOfGuests) / 6);
+    if (Number(listOfbookings[i].numberOfGuests) % 6 != 0) {
+      bookedTables += 1;
     }
   }
-  return bookedTables  
+  return bookedTables;
 }
 
-function canBeBooked(numberOfGuests: number, tablesBooked: number){
+function canBeBooked(numberOfGuests: number, tablesBooked: number) {
   let numberOfTables = 15;
   let tablesNeeded = Math.floor(Number(numberOfGuests) / 6);
-    if (Number(numberOfGuests) % 6 != 0){
-      tablesNeeded +=1
-    };
+  if (Number(numberOfGuests) % 6 != 0) {
+    tablesNeeded += 1;
+  }
 
-    if (numberOfTables - tablesBooked < tablesNeeded ){
-      console.log("Det finns inga lediga bord 18.00");
-      return false
-    }
-    console.log("Det finns lediga bord");
-    
-    return true
+  if (numberOfTables - tablesBooked < tablesNeeded) {
+    console.log("Det finns inga lediga bord 18.00");
+    return false;
+  }
+  console.log("Det finns lediga bord");
+
+  return true;
 }
 
 export function Booking() {
@@ -63,10 +64,8 @@ export function Booking() {
       )
       .then((response) => {
         console.log(response);
-        
+
         let bookingsFromAPI = response.data.map((bookings: IBookings) => {
-          
-          
           return new Bookings(
             bookings.date,
             bookings.time,
@@ -78,20 +77,27 @@ export function Booking() {
   }, []);
 
   console.log(bookings);
-  
 
   function checkFreeTables() {
-    let bookedTables = bookings.filter(x => x.date === date);
-    
-    setShowFirstTime(canBeBooked(Number(numberOfGuests), countTables(bookedTables.filter(x => x.time === "18.00"))));
+    let bookedTables = bookings.filter((x) => x.date === date);
 
-    setShowSecondTime(canBeBooked(Number(numberOfGuests), countTables(bookedTables.filter(x => x.time === "21.00"))));
-    
+    setShowFirstTime(
+      canBeBooked(
+        Number(numberOfGuests),
+        countTables(bookedTables.filter((x) => x.time === "18.00"))
+      )
+    );
+
+    setShowSecondTime(
+      canBeBooked(
+        Number(numberOfGuests),
+        countTables(bookedTables.filter((x) => x.time === "21.00"))
+      )
+    );
+
     setShowTableDiv(true);
     setShowUserForm(false);
-    }
-
-  
+  }
 
   //React-form-hook tar emot data från inputfält vid submit
   const {
@@ -183,54 +189,56 @@ export function Booking() {
       customer: user,
     };
     sendBooking(newBooking);
-    setShowBookingDiv(false)
+    setShowBookingDiv(false);
   };
 
   function sendBooking(createBooking: INewBooking) {
-      axios
+    axios
       .post(
         "https://school-restaurant-api.azurewebsites.net/booking/create",
         createBooking
       )
-      .then((response) => {
-        ;
-      });
+      .then((response) => {});
   }
 
-  function timeSlected(){
-    setShowUserForm(true)
+  function timeSlected() {
+    setShowUserForm(true);
   }
 
-  let firstFreeTime = (<div className="bookingRadioInput1">
-  <input
-    required
-    type="radio"
-    name="time"
-    value="18.00"
-    onChange={setTimeChecked}
-    onClick={timeSlected}
-  />
-  <label htmlFor="time">18.00</label>
-</div>)
-if(!showFirstTime){
-  firstFreeTime = (<></>)
-}
+  let firstFreeTime = (
+    <div className="bookingRadioInput1">
+      <input
+        required
+        type="radio"
+        name="time"
+        value="18.00"
+        onChange={setTimeChecked}
+        onClick={timeSlected}
+      />
+      <label htmlFor="time">18.00</label>
+    </div>
+  );
+  if (!showFirstTime) {
+    firstFreeTime = <></>;
+  }
 
-let secondFreeTime = (<div className="bookingRadioInput2">
-<input
-  className="bookingRadioInput2"
-  required
-  type="radio"
-  name="time"
-  value="21.00"
-  onChange={setTimeChecked}
-  onClick={timeSlected}
-/>
-<label htmlFor="time">21.00</label>
-</div>)
-if(!showSecondTime){
-  secondFreeTime = (<></>)
-}
+  let secondFreeTime = (
+    <div className="bookingRadioInput2">
+      <input
+        className="bookingRadioInput2"
+        required
+        type="radio"
+        name="time"
+        value="21.00"
+        onChange={setTimeChecked}
+        onClick={timeSlected}
+      />
+      <label htmlFor="time">21.00</label>
+    </div>
+  );
+  if (!showSecondTime) {
+    secondFreeTime = <></>;
+  }
 
 let userForm =(<form className="bookingUserForm" onSubmit={handleSubmit(onSubmit)}>
 <label htmlFor="name">Förnamn: </label>
@@ -251,7 +259,7 @@ let userForm =(<form className="bookingUserForm" onSubmit={handleSubmit(onSubmit
 
 <ErrorMessage
   errors={errors}
-  name="firstname"
+  name="name"
   render={({ messages }) => {
     console.log("messages", messages);
     return messages
@@ -326,7 +334,7 @@ let userForm =(<form className="bookingUserForm" onSubmit={handleSubmit(onSubmit
   }}
 />
 
-<label htmlFor="phonenumber">Telefonnummer: </label>
+<label htmlFor="phone">Telefonnummer: </label>
 <input
   placeholder="0700000000"
   {...register("phone", {
@@ -344,7 +352,7 @@ let userForm =(<form className="bookingUserForm" onSubmit={handleSubmit(onSubmit
 
 <ErrorMessage
   errors={errors}
-  name="phonenumber"
+  name="phone"
   render={({ messages }) => {
     console.log("messages", messages);
     return messages
@@ -389,56 +397,63 @@ let userForm =(<form className="bookingUserForm" onSubmit={handleSubmit(onSubmit
 </form>)
 if (!showUserForm){
   userForm = (<></>)
-}
+};
 
-let chooseTimeLabel = (<label>Välj tid:</label>)
-if(!showFirstTime && !showSecondTime){
-   firstFreeTime = (<p>Det finns inga lediga tider!</p>)
-   chooseTimeLabel = (<></>)
-   userForm = (<></>)
-}
+      
+  if (!showUserForm) {
+    userForm = <></>;
+  }
 
-let bookTableDiv = (<div className="bookingTimesDiv">
-{firstFreeTime}
-{secondFreeTime}
-</div>)
-if(!showBookTableDiv){
-  bookTableDiv = (<></>)
-}
+  let chooseTimeLabel = <label>Välj tid:</label>;
+  if (!showFirstTime && !showSecondTime) {
+    firstFreeTime = <p>Det finns inga lediga tider!</p>;
+    chooseTimeLabel = <></>;
+    userForm = <></>;
+  }
 
-let bookingDiv = (<div className="bookingDiv">
-<form className="bookingSearchForm">
-  <label htmlFor="date">Välj datum: </label>
-  <input
-    required
-    type="date"
-    name="date"
-    min={todaysDateToString}
-    onChange={setDateChecked}
-  ></input>
-
-  <label htmlFor="numberOfGuests">Antal personer: </label>
-  <input
-    required
-    name="numberOfGuests"
-    type="number"
-    min="1"
-    max="6"
-    onChange={setGuests}
-  ></input>
-</form>
-
-<button onClick={checkFreeTables}>Sök tider</button>
-{bookTableDiv}
-{userForm}
-</div>)
-if(!showBookingDiv){
-  bookingDiv = (<p>Tack för din bokning!</p>)
-}
-
-  return (
-    <div>{bookingDiv}</div>
+  let bookTableDiv = (
+    <div className="bookingTimesDiv">
+      {firstFreeTime}
+      {secondFreeTime}
+    </div>
   );
+  if (!showBookTableDiv) {
+    bookTableDiv = <></>;
+  }
+
+  let bookingDiv = (
+    <div className="bookingDiv">
+      <form className="bookingSearchForm">
+        <label htmlFor="date">Välj datum: </label>
+        <input
+          required
+          type="date"
+          name="date"
+          min={todaysDateToString}
+          onChange={setDateChecked}
+        ></input>
+
+        <label htmlFor="numberOfGuests">Antal personer: </label>
+        <input
+          required
+          name="numberOfGuests"
+          type="number"
+          min="1"
+          max="6"
+          onChange={setGuests}
+        ></input>
+      </form>
+
+      <Button onClick={checkFreeTables}>Sök tider</Button>
+      {bookTableDiv}
+      {userForm}
+    </div>
+  );
+  if (!showBookingDiv) {
+    bookingDiv = <p>Tack för din bokning!</p>;
+  }
+
+  return <div>{bookingDiv}</div>;
   {
     /* <Calendar onChange={getFreeTables} value={date} /> */
   }

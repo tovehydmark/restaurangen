@@ -8,6 +8,78 @@
     .menuList {
         width: 260px;
         padding: $base-padding;
-        
+
     }
+}
+
+// STARTSIDAN //
+
+@keyframes changeBg {
+
+    0% {
+        right: 0px;
+    }
+
+    10% {
+        right: 0px;
+    }
+
+    20% {
+        right: 1440px;
+    }
+
+    30% {
+        right: 1440px;
+    }
+
+    40% {
+        right: 2880px;
+    }
+
+    50% {
+        right: 2880px;
+    }
+
+    60% {
+        right: 1440;
+    }
+
+    70% {
+        right: 1440;
+    }
+
+    80% {
+        right: 1440px;
+    }
+
+    90% {
+        right: 0px;
+    }
+
+    100% {
+        right: 0px;
+    }
+}
+
+.photoContainer {
+    display: flex;
+    overflow: hidden;
+    margin-top: 3rem;
+    width: 4320px;
+    border: none;
+
+
+    .photos {
+        position: relative;
+        width: 1920px;
+        max-width: 100%;
+        height: 600px;
+
+        animation: changeBg 33s ease infinite;
+    }
+}
+
+.startpageTextContainer {
+    padding: $base-padding * 4 $base-padding * 40;
+    line-height: $base-padding * 3;
 }
