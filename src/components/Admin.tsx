@@ -13,13 +13,14 @@ class Booking {
     public date: string,
     public time: string,
     public numberOfGuests: number,
-    public customerId: string
+    public customerId: string,
+    public customer?: Customer
   ) {}
 }
 
 class Customer {
   constructor(
-    public customerId: string,
+    // public customerId: string,
     public name: string,
     public lastname: string,
     public email: string,
@@ -31,12 +32,11 @@ export function Admin() {
   //Booking info måste hämtas och sparas i en lista som vi mappar igenom. Detta bara placeholder
 
   const [booking, setBooking] = useState<Booking[]>([]);
-  const [customer, setCustomer] = useState<Customer[]>([]);
+  const [customer, setCustomer] = useState<Customer>();
   // const [customerId, setCustomerId] = useState<Booking[]>([]);
-  let customerID: string = "";
 
   const [customerList, setCustomerList] = useState<FetchBookings[]>([]);
-
+  console.log(booking);
   //Hämta bokningar
   useEffect(() => {
     if (booking.length > 0) return;
@@ -52,8 +52,32 @@ export function Admin() {
 
             // customerID.push(bookingInMap.customerId);
 
-            getTheCustomers(bookingInMap.customerId);
-            // customerID = bookingInMap.customerId;
+            axios
+              .get<ICustomerInformation>(
+                "https://school-restaurant-api.azurewebsites.net/customer/" +
+                  bookingInMap.customerId
+              )
+              .then((response) => {
+                // console.log(response.data);
+
+                // let customerGlobal2: Customer = {
+                //   name: response.data.name,
+                //   lastname: response.data.lastname,
+                //   email: response.data.email,
+                //   phone: response.data.phone,
+                // };
+
+                // return new Customer(
+                //   response.customerId,
+                //   customerInMap.name,
+                //   customerInMap.lastname,
+                //   customerInMap.email,
+                //   customerInMap.phone
+                // );
+
+                customerGlobal = response.data;
+                // console.log(customerGlobal);
+              });
 
             return new Booking(
               bookingInMap._id,
@@ -61,46 +85,53 @@ export function Admin() {
               bookingInMap.date,
               bookingInMap.time,
               bookingInMap.numberOfGuests,
-              bookingInMap.customerId
+              bookingInMap.customerId,
+              customerGlobal
             );
           }
         );
-        // console.log(response);
-        // setCustomerId(booking._id);
+
         setBooking(bookingsFromAPI);
       });
-  }, []);
+  }, [booking]);
 
-  function getTheCustomers(customerId: string) {
-    // console.log(customerId);
+  let customerGlobal: Customer = {
+    name: "",
+    lastname: "",
+    email: "",
+    phone: "",
+  };
 
-    axios
-      .get<ICustomerInformation[]>(
-        "https://school-restaurant-api.azurewebsites.net/customer/" + customerId
-      )
-      .then((response) => {
-        console.log(response);
+  // function getTheCustomers(customerId: string) {
+  //   // console.log(customerId);
 
-        let customerFromAPI = response.data.map(
-          (customerInMap: ICustomerInformation) => {
-            // console.log(customerInMap);
+  //   axios
+  //     .get<ICustomerInformation[]>(
+  //       "https://school-restaurant-api.azurewebsites.net/customer/" + customerId
+  //     )
+  //     .then((response) => {
+  //       console.log(response);
 
-            return new Customer(
-              customerInMap.id,
-              customerInMap.name,
-              customerInMap.lastname,
-              customerInMap.email,
-              customerInMap.phone
-            );
-          }
-        );
+  //       let customerFromAPI = response.data.map(
+  //         (customerInMap: ICustomerInformation) => {
+  //           // console.log(customerInMap);
 
-        console.log(response.data);
-        console.log(customerFromAPI);
+  //           return new Customer(
+  //             customerInMap.id,
+  //             customerInMap.name,
+  //             customerInMap.lastname,
+  //             customerInMap.email,
+  //             customerInMap.phone
+  //           );
+  //         }
+  //       );
 
-        setCustomer(customerFromAPI);
-      });
-  }
+  //       console.log(response.data);
+  //       console.log(customerFromAPI);
+
+  //       setCustomer(customerFromAPI);
+  //     });
+  // }
 
   //Hämta kunder
   // useEffect(() => {
