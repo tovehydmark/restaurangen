@@ -7,6 +7,8 @@ export const Button = styled.button`
   border: none;
   font-size: 1rem;
   font-family: "Roboto", sans-serif;
+
   cursor: pointer;
   width: 80px;
+  padding: 8px;
 `;

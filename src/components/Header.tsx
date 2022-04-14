@@ -10,7 +10,7 @@ const HamburgerContainer = styled.div`
     display: fixed;
     margin: 16px 0 0 8px;
     top: 0; //Lägger sig fortfarande till vänster, vet ej varför
-    right: 0 
+    right: 0;
     z-index: 10;
   }
 `;
