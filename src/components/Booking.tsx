@@ -107,7 +107,7 @@ export function Booking() {
     date: "",
     time: "",
     numberOfGuests: "",
-    customer: { firstname: "", lastname: "", email: "", phonenumber: "" },
+    customer: { name: "", lastname: "", email: "", phone: "" },
   };
 
   let yearToString = "";
@@ -173,6 +173,8 @@ export function Booking() {
   };
   //Kontrollerar och uppdaterar användaren, skapar objekt för ny bokning som ska skickas till API
   const onSubmit = (user: IFormInputs) => {
+    console.log(user);
+    
     newBooking = {
       restaurantId: resId,
       date: date,
@@ -231,10 +233,10 @@ if(!showSecondTime){
 }
 
 let userForm =(<form className="bookingUserForm" onSubmit={handleSubmit(onSubmit)}>
-<label htmlFor="firstname">Förnamn: </label>
+<label htmlFor="name">Förnamn: </label>
 <input
   placeholder="Sven"
-  {...register("firstname", {
+  {...register("name", {
     required: "Du måste fylla i förnamn",
     pattern: {
       value: /^[A-Za-z]+$/i,
@@ -327,7 +329,7 @@ let userForm =(<form className="bookingUserForm" onSubmit={handleSubmit(onSubmit
 <label htmlFor="phonenumber">Telefonnummer: </label>
 <input
   placeholder="0700000000"
-  {...register("phonenumber", {
+  {...register("phone", {
     required: "Du måste fylla i telefonnummer",
     pattern: {
       value: /^[0-9]+$/i,
