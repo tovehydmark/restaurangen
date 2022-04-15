@@ -1,7 +1,7 @@
 export interface IFormInputs {
-  firstname: string;
+  name: string;
   lastname: string;
   email: string;
-  phonenumber: string;
+  phone: string;
   GDPR: boolean;
 }

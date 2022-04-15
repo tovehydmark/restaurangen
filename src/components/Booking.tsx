@@ -113,7 +113,7 @@ export function Booking() {
     date: "",
     time: "",
     numberOfGuests: "",
-    customer: { firstname: "", lastname: "", email: "", phonenumber: "" },
+    customer: { name: "", lastname: "", email: "", phone: "" },
   };
 
   let yearToString = "";
@@ -179,6 +179,8 @@ export function Booking() {
   };
   //Kontrollerar och uppdaterar användaren, skapar objekt för ny bokning som ska skickas till API
   const onSubmit = (user: IFormInputs) => {
+    console.log(user);
+    
     newBooking = {
       restaurantId: resId,
       date: date,
@@ -238,163 +240,166 @@ export function Booking() {
     secondFreeTime = <></>;
   }
 
-  let userForm = (
-    <form className="bookingUserForm" onSubmit={handleSubmit(onSubmit)}>
-      <label htmlFor="firstname">Förnamn: </label>
-      <input
-        placeholder="Sven"
-        {...register("firstname", {
-          required: "Du måste fylla i förnamn",
-          pattern: {
-            value: /^[A-Za-z]+$/i,
-            message: "Får bara innehålla bokstäver",
-          },
-          minLength: {
-            value: 2,
-            message: "Fältet innehåller för få tecken",
-          },
-        })}
-      />
+let userForm =(<form className="bookingUserForm" onSubmit={handleSubmit(onSubmit)}>
+<label htmlFor="name">Förnamn: </label>
+<input
+  placeholder="Sven"
+  {...register("name", {
+    required: "Du måste fylla i förnamn",
+    pattern: {
+      value: /^[A-Za-z]+$/i,
+      message: "Får bara innehålla bokstäver",
+    },
+    minLength: {
+      value: 2,
+      message: "Fältet innehåller för få tecken",
+    },
+  })}
+/>
 
-      <ErrorMessage
-        errors={errors}
-        name="firstname"
-        render={({ messages }) => {
-          console.log("messages", messages);
-          return messages
-            ? Object.entries(messages).map(([type, message]) => (
-                <p className="errorMessage" key={type}>
-                  {message}
-                </p>
-              ))
-            : null;
-        }}
-      />
+<ErrorMessage
+  errors={errors}
+  name="name"
+  render={({ messages }) => {
+    console.log("messages", messages);
+    return messages
+      ? Object.entries(messages).map(([type, message]) => (
+          <p className="errorMessage" key={type}>
+            {message}
+          </p>
+        ))
+      : null;
+  }}
+/>
 
-      <label htmlFor="lastname">Efternamn: </label>
-      <input
-        placeholder="Svensson"
-        {...register("lastname", {
-          required: "Du måste fylla i efternamn",
-          pattern: {
-            value: /^[A-Za-z]+$/i,
-            message: "Får bara innehålla bokstäver",
-          },
-          minLength: {
-            value: 2,
-            message: "Fältet innehåller för få tecken",
-          },
-        })}
-      />
+<label htmlFor="lastname">Efternamn: </label>
+<input
+  placeholder="Svensson"
+  {...register("lastname", {
+    required: "Du måste fylla i efternamn",
+    pattern: {
+      value: /^[A-Za-z]+$/i,
+      message: "Får bara innehålla bokstäver",
+    },
+    minLength: {
+      value: 2,
+      message: "Fältet innehåller för få tecken",
+    },
+  })}
+/>
 
-      <ErrorMessage
-        errors={errors}
-        name="lastname"
-        render={({ messages }) => {
-          console.log("messages", messages);
-          return messages
-            ? Object.entries(messages).map(([type, message]) => (
-                <p className="errorMessage" key={type}>
-                  {message}
-                </p>
-              ))
-            : null;
-        }}
-      />
+<ErrorMessage
+  errors={errors}
+  name="lastname"
+  render={({ messages }) => {
+    console.log("messages", messages);
+    return messages
+      ? Object.entries(messages).map(([type, message]) => (
+          <p className="errorMessage" key={type}>
+            {message}
+          </p>
+        ))
+      : null;
+  }}
+/>
 
-      <label htmlFor="email">Email: </label>
-      <input
-        placeholder="sven@domän.se"
-        {...register("email", {
-          required: "Du måste fylla i email",
-          pattern: {
-            value: /^[A-Za-z0-9_-]+@[a-z0-9.-]+\.[a-z]{2,4}$/i,
-            message: "Måste vara en emailadress",
-          },
-          minLength: {
-            value: 5,
-            message: "Fältet innehåller för få tecken",
-          },
-        })}
-      />
+<label htmlFor="email">Email: </label>
+<input
+  placeholder="sven@domän.se"
+  {...register("email", {
+    required: "Du måste fylla i email",
+    pattern: {
+      value: /^[A-Za-z0-9_-]+@[a-z0-9.-]+\.[a-z]{2,4}$/i,
+      message: "Måste vara en emailadress",
+    },
+    minLength: {
+      value: 5,
+      message: "Fältet innehåller för få tecken",
+    },
+  })}
+/>
 
-      <ErrorMessage
-        errors={errors}
-        name="email"
-        render={({ messages }) => {
-          console.log("messages", messages);
-          return messages
-            ? Object.entries(messages).map(([type, message]) => (
-                <p className="errorMessage" key={type}>
-                  {message}
-                </p>
-              ))
-            : null;
-        }}
-      />
+<ErrorMessage
+  errors={errors}
+  name="email"
+  render={({ messages }) => {
+    console.log("messages", messages);
+    return messages
+      ? Object.entries(messages).map(([type, message]) => (
+          <p className="errorMessage" key={type}>
+            {message}
+          </p>
+        ))
+      : null;
+  }}
+/>
 
-      <label htmlFor="phonenumber">Telefonnummer: </label>
-      <input
-        placeholder="0700000000"
-        {...register("phonenumber", {
-          required: "Du måste fylla i telefonnummer",
-          pattern: {
-            value: /^[0-9]+$/i,
-            message: "Fältet får endast innehålla siffror",
-          },
-          minLength: {
-            value: 5,
-            message: "Fältet innehåller för få tecken",
-          },
-        })}
-      />
+<label htmlFor="phone">Telefonnummer: </label>
+<input
+  placeholder="0700000000"
+  {...register("phone", {
+    required: "Du måste fylla i telefonnummer",
+    pattern: {
+      value: /^[0-9]+$/i,
+      message: "Fältet får endast innehålla siffror",
+    },
+    minLength: {
+      value: 5,
+      message: "Fältet innehåller för få tecken",
+    },
+  })}
+/>
 
-      <ErrorMessage
-        errors={errors}
-        name="phonenumber"
-        render={({ messages }) => {
-          console.log("messages", messages);
-          return messages
-            ? Object.entries(messages).map(([type, message]) => (
-                <p className="errorMessage" key={type}>
-                  {message}
-                </p>
-              ))
-            : null;
-        }}
-      />
+<ErrorMessage
+  errors={errors}
+  name="phone"
+  render={({ messages }) => {
+    console.log("messages", messages);
+    return messages
+      ? Object.entries(messages).map(([type, message]) => (
+          <p className="errorMessage" key={type}>
+            {message}
+          </p>
+        ))
+      : null;
+  }}
+/>
 
-      <div className="gdpr">
-        <label htmlFor="GDPR">
-          Jag godkänner att The Codfather får lagra och använda mina
-          personuppgifter enligt GDPR
-        </label>
-        <input
-          type="checkbox"
-          {...register("GDPR", {
-            required:
-              "Du måste godkänna hantering av personuppgifter för att kunna boka",
-          })}
-        />
-        <ErrorMessage
-          errors={errors}
-          name="GDPR"
-          render={({ messages }) => {
-            console.log("messages", messages);
-            return messages
-              ? Object.entries(messages).map(([type, message]) => (
-                  <p className="errorMessage" key={type}>
-                    {message}
-                  </p>
-                ))
-              : null;
-          }}
-        />
-      </div>
+<div className="gdpr">
+  <label htmlFor="GDPR">
+    Jag godkänner att The Codfather får lagra och använda mina
+    personuppgifter enligt GDPR
+  </label>
+  <input
+    type="checkbox"
+    {...register("GDPR", {
+      required:
+        "Du måste godkänna hantering av personuppgifter för att kunna boka",
+    })}
+  />
+  <ErrorMessage
+    errors={errors}
+    name="GDPR"
+    render={({ messages }) => {
+      console.log("messages", messages);
+      return messages
+        ? Object.entries(messages).map(([type, message]) => (
+            <p className="errorMessage" key={type}>
+              {message}
+            </p>
+          ))
+        : null;
+    }}
+  />
+</div>
 
-      <input className="bookingBtn" type="submit" value="Skicka" />
-    </form>
-  );
+<input className="bookingBtn" type="submit" />
+</form>)
+if (!showUserForm){
+  userForm = (<></>)
+};
+
+      
   if (!showUserForm) {
     userForm = <></>;
   }
