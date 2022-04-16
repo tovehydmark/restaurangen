@@ -55,6 +55,8 @@ export function Booking() {
   //   phonenumber: ""
   // })
   const [bookings, setBookings] = useState<Bookings[]>([]);
+  const [showGuestsInput, setShowGuestsInput] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
 
   useEffect(() => {
     axios
@@ -171,11 +173,19 @@ export function Booking() {
   const setDateChecked = (e: ChangeEvent<HTMLInputElement>) => {
     let date = e.target.value;
     setDate(date);
+    setShowGuestsInput(true);
   };
   //Kontrollerar och uppdaterar antal gäster
   const setGuests = (e: ChangeEvent<HTMLInputElement>) => {
     let guests = e.target.value;
     setNumberOfGuests(guests);
+    if(Number(guests)>0){
+      setShowSearch(true);
+    }
+    else{
+      setShowSearch(false);
+    };
+    
   };
   //Kontrollerar och uppdaterar användaren, skapar objekt för ny bokning som ska skickas till API
   const onSubmit = (user: IFormInputs) => {
@@ -421,6 +431,26 @@ if (!showUserForm){
     bookTableDiv = <></>;
   }
 
+  let guestsInput =(<></>)
+    if(showGuestsInput){
+      guestsInput = (<div>
+        <label htmlFor="numberOfGuests">Antal personer: </label>
+          <input
+            required
+            name="numberOfGuests"
+            type="number"
+            min="1"
+            max="90"
+            onChange={setGuests}
+          ></input>
+      </div>)
+    };
+  
+  let searchBtn =(<></>)
+  if(showSearch){
+    searchBtn =(<Button onClick={checkFreeTables}>Sök tider</Button>)
+  }
+
   let bookingDiv = (
     <div className="bookingDiv">
       <form className="bookingSearchForm">
@@ -432,19 +462,9 @@ if (!showUserForm){
           min={todaysDateToString}
           onChange={setDateChecked}
         ></input>
-
-        <label htmlFor="numberOfGuests">Antal personer: </label>
-        <input
-          required
-          name="numberOfGuests"
-          type="number"
-          min="1"
-          max="6"
-          onChange={setGuests}
-        ></input>
+         {guestsInput}
       </form>
-
-      <Button onClick={checkFreeTables}>Sök tider</Button>
+      {searchBtn}
       {bookTableDiv}
       {userForm}
     </div>
