@@ -3,7 +3,6 @@ import Calendar from "react-calendar";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import axios from "axios";
-import { INewUser } from "../models/INewUser";
 import { INewBooking } from "../models/INewBooking";
 import { IFormInputs } from "../models/IFormInputs";
 import { IBookings } from "../models/IBookings";
@@ -11,6 +10,14 @@ import { Bookings } from "../models/Bookings";
 import { Button } from "./styledComponents/Button";
 
 export let resId = "624c1940850953b8ad161715";
+
+export class BookingInfo{
+  constructor(
+  public date: string,
+  public time: string,
+  public numberOfGuests: string
+  ){};
+}
 
 function countTables(listOfbookings: Bookings[]) {
   let bookedTables = 0;
@@ -48,12 +55,7 @@ export function Booking() {
   const [showUserForm, setShowUserForm] = useState(false);
   const [showBookTableDiv, setShowTableDiv] = useState(false);
   const [showBookingDiv, setShowBookingDiv] = useState(true);
-  // const [newUser, setNewUser] = useState<INewUser>({
-  //   firstname: "",
-  //   lastname: "",
-  //   email:"",
-  //   phonenumber: ""
-  // })
+  const [bookingInfo, setBookingInfo] = useState<BookingInfo>({date:"",time:"",numberOfGuests:""});
   const [bookings, setBookings] = useState<Bookings[]>([]);
 
   useEffect(() => {
@@ -63,8 +65,6 @@ export function Booking() {
           resId
       )
       .then((response) => {
-        console.log(response);
-
         let bookingsFromAPI = response.data.map((bookings: IBookings) => {
           return new Bookings(
             bookings.date,
@@ -76,7 +76,6 @@ export function Booking() {
       });
   }, []);
 
-  console.log(bookings);
 
   function checkFreeTables() {
     let bookedTables = bookings.filter((x) => x.date === date);
@@ -179,7 +178,6 @@ export function Booking() {
   };
   //Kontrollerar och uppdaterar användaren, skapar objekt för ny bokning som ska skickas till API
   const onSubmit = (user: IFormInputs) => {
-    console.log(user);
     
     newBooking = {
       restaurantId: resId,
@@ -190,6 +188,7 @@ export function Booking() {
     };
     sendBooking(newBooking);
     setShowBookingDiv(false);
+    
   };
 
   function sendBooking(createBooking: INewBooking) {
@@ -198,8 +197,18 @@ export function Booking() {
         "https://school-restaurant-api.azurewebsites.net/booking/create",
         createBooking
       )
-      .then((response) => {});
-  }
+      .then((response) => {
+        getBookingInfo(response.data.insertedId)
+      });   
+  };
+
+  function getBookingInfo(bookingId:string){    
+    axios.get("https://school-restaurant-api.azurewebsites.net/booking/" + bookingId)
+    .then((response) => {
+      let bookingInfoFromApi = response.data[0]   
+      setBookingInfo(bookingInfoFromApi);
+    });
+  };
 
   function timeSlected() {
     setShowUserForm(true);
@@ -398,7 +407,6 @@ let userForm =(<form className="bookingUserForm" onSubmit={handleSubmit(onSubmit
 if (!showUserForm){
   userForm = (<></>)
 };
-
       
   if (!showUserForm) {
     userForm = <></>;
@@ -413,6 +421,7 @@ if (!showUserForm){
 
   let bookTableDiv = (
     <div className="bookingTimesDiv">
+      {chooseTimeLabel}
       {firstFreeTime}
       {secondFreeTime}
     </div>
@@ -442,55 +451,22 @@ if (!showUserForm){
           max="6"
           onChange={setGuests}
         ></input>
+        
       </form>
+      <button onClick={checkFreeTables}>Sök tider</button>
 
-      <Button onClick={checkFreeTables}>Sök tider</Button>
+      
       {bookTableDiv}
       {userForm}
     </div>
   );
+
   if (!showBookingDiv) {
-    bookingDiv = <p>Tack för din bokning!</p>;
+    bookingDiv = (<div>
+      <p>Tack för din bokning!</p>
+      <p>Du har bokat bord den {bookingInfo.date}, klockan {bookingInfo.time} för {bookingInfo.numberOfGuests} personer.</p>
+    </div>);
   }
 
   return <div>{bookingDiv}</div>;
-  {
-    /* <Calendar onChange={getFreeTables} value={date} /> */
-  }
-  /* <form>
-      <label htmlFor="firstname">Förnamn: </label>
-      <input 
-      placeholder="Förnamn" 
-      type="text" 
-      name="firstname" 
-      value={newUser.firstname} 
-      onChange={handleChange} />
-
-      <label htmlFor="lastname">Efternamn: </label>
-      <input 
-      placeholder="Efternamn" 
-      type="text" name="lastname" 
-      value={newUser.lastname} 
-      onChange={handleChange} />
-
-      <label htmlFor="email">Email: </label>
-      <input 
-      placeholder="email@somedomain.com" 
-      name="email" 
-      type="email" 
-      value={newUser.email} 
-      onChange={handleChange} />
-
-      <label htmlFor="phonenumber">Telefonummer: </label>
-      <input 
-      placeholder="070-0000000" 
-      type="text" 
-      name="phonenumber" 
-      value={newUser.phonenumber} 
-      onChange={handleChange} />
-
-      <label htmlFor="GDPR">Jag godkänner att The Codfather får lagra och använda mina personuppgifter enligt GDPR </label>
-      
-      <button>Boka</button>
-    </form> */
 }
