@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { HamburgerMenu } from "./styledComponents/HamburgerMenu";
+
+//All styling for the navigation is in the header component as a state variable is used to toggle the hamburger-menu. Instead of having some styling in this component, and some in a css file, we made the choice to gather it all in one place for a better structure.
 
 const HamburgerContainer = styled.div`
   display: none;
@@ -9,10 +10,30 @@ const HamburgerContainer = styled.div`
     width: 40px;
     display: fixed;
     margin: 16px 0 0 8px;
-    top: 0; //Lägger sig fortfarande till vänster, vet ej varför
+    top: 0;
     right: 0;
     z-index: 10;
   }
+`;
+
+const HamburgerDiv = styled.div`
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  justify-content: space-around;
+  flex-flow: column nowrap;
+  z-index: 10;
+`;
+
+const Burger = styled.div`
+  width: 2rem;
+  height: 0.25 rem;
+  border-radius: 10px;
+  background-color: black;
+  border: 2px black solid; //La in denna istället för background color - why tho
+  transform-origin: 1px;
+  transition: all 0.3s linear;
+  z-index: 100;
 `;
 
 export function Header() {
@@ -33,8 +54,6 @@ export function Header() {
       align-items: flex-end;
     }
 
-    //Lägg denna till höger i mobilvy
-    //När man klicakr på denna nu öppnas menyn
     p {
       display: ${!hamburgerOpen ? "inline" : "none"};
       margin: 0;
@@ -60,7 +79,7 @@ export function Header() {
     font-size: 1.5rem;
 
     a {
-      color: white;
+      color: black;
       text-decoration: none;
 
       :hover {
@@ -78,18 +97,20 @@ export function Header() {
       width: 100%;
       margin-top: 70px;
       background-color: rgba(0, 79, 74, 1);
+      cursor: pointer;
 
       li {
         margin: 30px;
+        a {
+          color: white;
+        }
       }
     }
 
-    //La detta här för att nav ska synas även när man breddar skärmen oavsett om hamburgerOpen är true eller false
     @media (min-width: 768px) {
-      display: ${hamburgerOpen ? "flex" : "flex"};
+      display: flex;
       flex-direction: row;
       a {
-        color: black; //Ändra detta när bg-color är satt i headern
         margin-right: 30px;
       }
     }
@@ -115,9 +136,16 @@ export function Header() {
         </Ul>
         <p>The Codfather</p>
         <HamburgerContainer onClick={toggleHamburger}>
-          <HamburgerMenu></HamburgerMenu>
+          <HamburgerDiv className="hamburger">
+            <Burger className="burger burger1"></Burger>
+            <Burger className="burger burger2"></Burger>
+            <Burger className="burger burger3"></Burger>
+          </HamburgerDiv>
         </HamburgerContainer>
       </Nav>
     </header>
   );
 }
+
+//Kvar att fixa för evot: animera kryss
+//Navlink
