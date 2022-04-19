@@ -54,7 +54,6 @@ export function Header() {
       align-items: flex-end;
     }
 
-    //När man klicakr på denna nu öppnas menyn
     p {
       display: ${!hamburgerOpen ? "inline" : "none"};
       margin: 0;
@@ -102,6 +101,9 @@ export function Header() {
 
       li {
         margin: 30px;
+        a {
+          color: white;
+        }
       }
     }
 
@@ -144,3 +146,5 @@ export function Header() {
     </header>
   );
 }
+
+//Kvar att fixa för evot: animera kryss
