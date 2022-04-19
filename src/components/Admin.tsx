@@ -1,252 +1,93 @@
-import "../style/style.scss";
-import { useEffect, useState } from "react";
+//Created a new component to test out this code for admin aswell. We can decided as a group what we think works best.
+//Put and Delete is also implemented here
+
 import axios from "axios";
-import { IBookingInformation } from "../models/IBookingInformation";
-import { resId } from "./Booking";
-import { ICustomerInformation } from "../models/ICustomerInformation";
-import { FetchBookings } from "../models/FetchBookings";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { url, resId } from "../services/createRestaurant";
 
-// class Booking {
-//   constructor(
-//     public bookingId: string,
-//     public restaurantId: string,
-//     public date: string,
-//     public time: string,
-//     public numberOfGuests: number,
-//     public customerId: string,
-//     public customer?: Customer
-//   ) {}
-// }
+//RestaurantBooking class containing all objectkeys from API when fetching bookings + a customer object and the resturant id.
+//The customer object is fetch throug anoter get from API
+//The resturant id is only needed when changing or deleteing a booking, hence its not required
+export class RestaurantBooking {
+  constructor(
+    public _id: string,
+    public date: string,
+    public time: string,
+    public numberOfGuests: string,
+    public customerId: string,
+    public customer?: Customer,
+    public restaurantId?: string,
+    public id?: string
+  ) {}
+}
 
-// class Customer {
-//   constructor(
-//     // public customerId: string,
-//     public name: string,
-//     public lastname: string,
-//     public email: string,
-//     public phone: string
-//   ) {}
-// }
+//The Customer class containing all objectkeys from API when fetching a customer.
+export class Customer {
+  constructor(
+    public name: string,
+    public lastname: string,
+    public email: string,
+    public phone: string,
+    public id?: string
+  ) {}
+}
 
-//Nu skriver den ut bokningar + kunder i rätt antal UTAN react.StrictMode!
+//Bookings interface
+export interface IBookings {
+  _id: string;
+  restaurantId: string;
+  date: string;
+  time: string;
+  numberOfGuests: string;
+  customerId: string;
+  customer: Customer;
+}
 
 export function Admin() {
-  const [booking, setBooking] = useState<IBookingInformation[]>([]);
-  // const [customer, setCustomer] = useState<ICustomerInformation[]>([]);
+  //List of bookings fetched from API
+  const [bookings, setBookings] = useState<RestaurantBooking[]>([]);
+  // //The restaurant id
+  // let resId = "624c1940850953b8ad161715";
 
-  const [customerList, setCustomerList] = useState<ICustomerInformation[]>([]);
-
-  //Hämta bokningar
   useEffect(() => {
-    if (booking.length > 0) return;
-
+    //Fetches bookings from API
     axios
-      .get<IBookingInformation[]>(
-        "https://school-restaurant-api.azurewebsites.net/booking/restaurant/" +
-          resId
-      )
+      .get<RestaurantBooking[]>(url + "booking/restaurant/" + resId)
       .then((response) => {
-        //Sorterar listan så den hamnar i rätt ordning på skärmen och sparar sen till setBooking
-        response.data.sort((a, b) => {
-          return a.customerId.localeCompare(b.customerId);
-        });
-
-        setBooking(response.data);
-
-        response.data.map((bookingInMap: IBookingInformation) => {
-          axios
-            .get<ICustomerInformation[]>(
-              "https://school-restaurant-api.azurewebsites.net/customer/" +
-                bookingInMap.customerId
-            )
-            .then((response) => {
-              response.data.map((customerFromApi) => {
-                customerList.push(customerFromApi);
-
-                //Sorterar listan så den hamnar i rätt ordning på skärmen och sparar sen till CustomerList
-                customerList.sort((a, b) => {
-                  return a._id.localeCompare(b._id);
-                });
-
-                setCustomerList([...customerList]);
-              });
-            });
-        });
+        let bookingsFromAPI = response.data.map(
+          (booking: RestaurantBooking) => {
+            return new RestaurantBooking(
+              booking._id,
+              booking.date,
+              booking.time,
+              booking.numberOfGuests,
+              booking.customerId
+            );
+          }
+        );
+        setBookings(bookingsFromAPI);
       });
-  });
+  }, []);
 
-  // console.log(customer); //Här får vi ut en lista med alla customers, om vi kör setCustomer som ovan - setCustomer(bookingListForPush) och - setCustomer([...customer]);
+  //Maps out the bookings with customer in a rendered list.
+  let lis = bookings.map((booking, i) => {
+    console.log(booking.customerId);
 
-  // let customerGlobal: Customer = {
-  //   name: "",
-  //   lastname: "",
-  //   email: "",
-  //   phone: "",
-  // };
-
-  // function getTheCustomers(customerId: string) {
-  //   // console.log(customerId);
-
-  //   axios
-  //     .get<ICustomerInformation[]>(
-  //       "https://school-restaurant-api.azurewebsites.net/customer/" + customerId
-  //     )
-  //     .then((response) => {
-  //       console.log(response);
-
-  //       let customerFromAPI = response.data.map(
-  //         (customerInMap: ICustomerInformation) => {
-  //           // console.log(customerInMap);
-
-  //           return new Customer(
-  //             customerInMap.id,
-  //             customerInMap.name,
-  //             customerInMap.lastname,
-  //             customerInMap.email,
-  //             customerInMap.phone
-  //           );
-  //         }
-  //       );
-
-  //       console.log(response.data);
-  //       console.log(customerFromAPI);
-
-  //       setCustomer(customerFromAPI);
-  //     });
-  // }
-
-  //Hämta kunder
-  // useEffect(() => {
-  //   axios
-  //     .get<ICustomerInformation[]>(
-  //       "https://school-restaurant-api.azurewebsites.net/customer/" + customerID
-  //     )
-  //     .then((response) => {
-  //       let customerFromAPI = response.data.map(
-  //         (customerInMap: ICustomerInformation) => {
-  //           console.log(customerInMap.id);
-
-  //           return new Customer(
-  //             customerInMap.id,
-  //             customerInMap.name,
-  //             customerInMap.lastname,
-  //             customerInMap.email,
-  //             customerInMap.phone
-  //           );
-  //         }
-  //       );
-  //       // console.log(response);
-  //       setCustomer(customerFromAPI);
-  //     });
-  // }, [booking]);
-
-  // hämtar bokning med restaurangid
-  // loopa bokning för att få ut kundid
-  // hämta kunden genom bokningsid
-  // useEffect(() => {
-  //   axios
-  //     .get<IBookingInformation[]>(
-  //       "https://school-restaurant-api.azurewebsites.net/booking/restaurant/" +
-  //         resId
-  //     )
-  //     .then((response) => {
-  //       let customerFromApi = response.data.map(
-  //         (customer: IBookingInformation) => {
-  //           getCustomer(customer.customerId);
-  //         }
-  //       );
-
-  //       setBooking(response.data);
-  //     });
-  // }, []);
-
-  // useEffect(() => {
-  //   setCustomerList(testList);
-  // }, []);
-  // console.log(customerList);
-
-  // function getCustomer(customerId: string) {
-  //   axios
-  //     .get<ICustomerInformation[]>(
-  //       "https://school-restaurant-api.azurewebsites.net/customer/" + customerId
-  //     )
-  //     .then((response) => {
-  //       let customerBookings = response.data.map(
-  //         (bookings: ICustomerInformation) => {
-  //           // console.log(bookings);
-  //           testList.push(bookings);
-  //           return new FetchBookings(
-  //             bookings.id,
-  //             bookings.name,
-  //             bookings.lastname,
-  //             bookings.email,
-  //             bookings.phone
-  //           );
-  //         }
-  //       );
-
-  //       console.log(testList);
-
-  //       setCustomer(customerBookings);
-  //       console.log(customerBookings);
-  //     });
-  // }
-  // useEffect(() => {
-  //   axios
-  //     .get<ICustomerInformation[]>(
-  //       "https://school-restaurant-api.azurewebsites.net/customer/" +
-  //         "CUSTOMERID"
-  //     )
-  //     .then((response) => {
-  //       console.log(response);
-
-  //       setCustomer(response.data);
-  //     });
-  // }, []);
-
-  let bookingInformation = booking.map((booking, i) => {
     return (
-      <div key={i} className="bookingDetails">
-        <ul>
-          <li>Bokningsid: {booking._id}</li>
-          <li>Kundid: {booking.customerId}</li>
-          <li>Datum: {booking.date}</li>
-          <li>Tid: {booking.time}</li>
-          <li>Antal gäster: {booking.numberOfGuests}</li>
-        </ul>
-        <button>Ändra kunduppgifter</button>
-      </div>
+      <ul key={i} className="bookingInList">
+        <li>Boknings id: {booking._id}</li>
+        <li>Kund id: {booking.customerId}</li>
+        <li>Datum: {booking.date}</li>
+        <li>Tid: {booking.time}</li>
+        <li>Antal gäster: {booking.numberOfGuests}</li>
+
+        <Link className="showBookingsBtn" to={`/bookinginfo/${booking._id}`}>
+          Visa bokning
+        </Link>
+      </ul>
     );
   });
 
-  let customerInformation = customerList?.map((customer, i) => {
-    return (
-      <div key={i} className="bookingDetails">
-        <ul>
-          <li>Bokningsid: {customer._id}</li>
-          <li>Namn: {customer.name}</li>
-          <li>Efternamn: {customer.lastname}</li>
-          <li>Email: {customer.email}</li>
-          <li>Telefon: {customer.phone}</li>
-        </ul>
-        <div className="buttonPosition">
-          <button>Ändra bokning</button>
-          <button>Radera bokning</button>
-        </div>
-      </div>
-    );
-  });
-
-  return (
-    <section className="showBookings">
-      <div>
-        <p>Bokningsinformation</p>
-        {bookingInformation}
-      </div>
-      <div>
-        <p>Kunduppgifter</p>
-        {customerInformation}
-      </div>
-    </section>
-  );
+  return <div>{lis}</div>;
 }

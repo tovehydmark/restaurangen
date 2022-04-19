@@ -1,8 +1,11 @@
 import axios from "axios";
 
+export let url = "https://school-restaurant-api.azurewebsites.net/";
+export let resId = "624c1940850953b8ad161715";
+
 export function createRestaurant() {
   axios
-    .post("https://school-restaurant-api.azurewebsites.net/restaurant/create", {
+    .post(url + "restaurant/create", {
       name: "The Codfather",
       address: {
         street: "Laxgatan 14",
