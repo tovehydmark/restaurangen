@@ -17,7 +17,6 @@ header {
 
 // MAIN OUTLET //
 main {
-    height: 100vh;
 
     p {
         font-family: $base-font;
@@ -252,8 +251,49 @@ main {
 }
 
 // ADMINSIDAN //
+.linkBackToBookings {
+    color: #000;
+    font-weight: 700;
+    font-size: 1.4rem;
+    margin: 1rem;
+    display: inline-block;
+}
 
+.showBookingsBtn {
+    background-color: #008178;
+    color: #fff;
+    border-radius: 8px;
+    border: none;
+    font-size: 1rem;
+    font-family: "Roboto", sans-serif;
+    cursor: pointer;
+    display: inline-block;
+    margin: 1rem;
+    padding: $base-padding;
+    text-decoration: none;
+}
 
+.changeBtn {
+    background-color: #008178;
+    color: #fff;
+    border-radius: 8px;
+    border: none;
+    font-size: 1rem;
+    font-family: "Roboto", sans-serif;
+    cursor: pointer;
+    padding: $base-padding;
+}
+
+.deleteBtn {
+    background-color: #CF1D15;
+    color: #fff;
+    border-radius: 8px;
+    border: none;
+    font-size: 1rem;
+    font-family: "Roboto", sans-serif;
+    cursor: pointer;
+    padding: $base-padding;
+}
 
 // FOOTER //
 footer {
