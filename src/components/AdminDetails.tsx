@@ -24,7 +24,6 @@ function countTables(listOfbookings: RestaurantBooking[]) {
       bookedTables += 1;
     }
   }
-  console.log(bookedTables);
   return bookedTables;
 }
 
@@ -42,11 +41,13 @@ function canBeBooked(numberOfGuests: number, tablesBooked: number) {
   //checks if there is enough tables available for booking
   if (numberOfTables - tablesBooked < tablesNeeded) {
     return false;
+    console.log("För få lediga bord");
   }
   return true;
 }
 
 export const AdminDetails = () => {
+//useStates and useEffects
   const [bookings, setBookings] = useState<RestaurantBooking[]>([]);
   const [booking, setBooking] = useState<RestaurantBooking>();
   const [customer, setCustomer] = useState<Customer>();
@@ -60,7 +61,10 @@ export const AdminDetails = () => {
   const [showUserForm, setShowUserForm] = useState(false);
   //Boolean to check if an edit is ready to send to API
   const [editOK, setEditOK] = useState(false);
+  //Toggles delete booking check
   const [showDeleteBooking, setShowDeleteBooking] = useState(false);
+  //Toggles main div content
+  const [showMainDiv, setShowMainDiv] = useState(true);
 
   let { id } = useParams<string>();
 
@@ -106,64 +110,67 @@ export const AdminDetails = () => {
     });
   }, [booking, id]);
 
+//Functions
   //Shows the edit form
   function showEditForm() {
     setShowForm(true);
     setEditBooking(booking);
   }
-
   //Hides the edit form
   function hideEditForm() {
     setShowForm(false);
   }
-
   //Shows the edit user form
   function showEditUserForm() {
     setShowUserForm(true);
     setEditBooking(booking);
     setEditUser(customer);
   }
-
   function hideEditUserForm() {
     setShowUserForm(false);
   }
-
   //Function that checks if there is available tables after editing booking
   function checkFreeTables() {
     if (editBooking === undefined) {
       return;
     }
+    // Removes the bookings we are chaning from the list of bookings.
+    // This makes the count of free tables accurate. 
+    for (let i = 0; i < bookings.length; i++){
+      if(bookings[i]._id === editBooking._id){
+        bookings.splice(i,1);
+      };    
+    };
     //creates a filtred list for the date of the edited booking
     let bookedTables = bookings.filter((x) => x.date === editBooking.date);
-    //creates a filtred list for the time of the edited booking
+    //Finds the objekt in bookings that matches the booking we're editing
     let thisBooking = bookings.find((x) => x._id === editBooking._id);
-    //Checks if number of guests is increased
-    if (
-      Number(thisBooking?.numberOfGuests) < Number(editBooking.numberOfGuests)
-    ) {
-      console.log("hej");
 
+    //Checks if number of guests is increased
+    // if (
+    //   Number(thisBooking?.numberOfGuests) < Number(editBooking.numberOfGuests)
+    // ) {
       //Sets the editOK to true or false by checking if there is enough tables
       setEditOK(
         canBeBooked(
           Number(editBooking.numberOfGuests),
           countTables(bookedTables.filter((x) => x.time === editBooking.time))
-        )
+        )       
       );
-    }
-    //if the number of guests is decreased no table check is needed
-    else {
-      setEditOK(true);
-    }
-  }
+      console.log(editOK);
+    // }
+    // //if the number of guests is decreased no table check is needed
+    // else {
+    //   setEditOK(true);
+    // };
+  };
 
-  //Checks if a edited booking can be saved and sent to API
+  //Saves and sends edited booking to API
   function saveChanges() {
     //Makes sure that a booking for editing is set
     if (editBooking === undefined) {
       return;
     }
-
     //The booking with the edited values.
     let updatedBooking: RestaurantBooking = {
       _id: editBooking._id,
@@ -174,20 +181,19 @@ export const AdminDetails = () => {
       time: editBooking.time,
       numberOfGuests: editBooking.numberOfGuests,
     };
-    console.log(JSON.stringify(updatedBooking));
-
-    checkFreeTables();
-
     //Checks that a changed booking can be made
     if (editOK === true) {
       console.log("uppdaterar bokning");
-
+      //sends updated booking to API
       axios
         .put(url + "booking/update/" + updatedBooking._id, updatedBooking)
         .then((response) => {
           console.log(response.data);
         });
+      //Renders the changes   
       setBooking(updatedBooking);
+      //hides form and save button
+      setEditOK(false);
       setShowForm(false);
     }
     //If the changed booking cant be made because of not enough available tables.
@@ -195,13 +201,15 @@ export const AdminDetails = () => {
       console.log(
         "Det finns inga lediga bord för den här ändringen, försök med en annan dag eller tid"
       );
-    }
-  }
+    };
+  };
 
+  //Saves and sends edited customer to API
   function saveUserChanges() {
     if (editUser === undefined || editBooking === undefined) {
       return;
     }
+    //The edited customer
     let updatedCustomer: Customer = {
       id: editBooking.customerId,
       name: editUser.name,
@@ -209,35 +217,102 @@ export const AdminDetails = () => {
       email: editUser.email,
       phone: editUser.phone,
     };
-    console.log(JSON.stringify(updatedCustomer));
+    //Sends updated customer to api
     axios
       .put(url + "customer/update/" + updatedCustomer.id, updatedCustomer)
       .then((response) => {
         console.log(response.data);
       });
+    //Renders updates  
     setCustomer(updatedCustomer);
+    //Hides edit form
     setShowUserForm(false);
   }
-
+  //shows the deletebooking check
   function deleteBookingCheck() {
     setShowDeleteBooking(true);
     setEditBooking(booking);
   }
 
+  //function to delete booking from API
   function deleteBooking() {
-    setShowDeleteBooking(false);
+    //Renders that the booking is deleted
+    setShowMainDiv(false);
     if (editBooking === undefined) {
       return;
-    }
+    };
+    //Deletes booking from API
     axios.delete(url + "booking/delete/" + editBooking._id).then((response) => {
-      console.log(response + "Bokning borttagen");
     });
-  }
+    console.log("Bokning borttagen");
+  };
 
+  //Hides delete booking check
   function cancelDeleteBooking() {
     setShowDeleteBooking(false);
-  }
+  };
 
+ 
+//Anonymous functions that targets values changed in forms.
+  //Gets the changed date value and sets the new value to the booking
+  const setDateChecked = (e: ChangeEvent<HTMLInputElement>) => {
+    let newDate = e.target.value;
+    if (newDate === undefined || editBooking === undefined) {
+      return;
+    }
+    setEditBooking({ ...editBooking, date: newDate });
+  };
+  //Gets the changed time value and sets the new value to the booking
+  const setTimeChecked = (e: ChangeEvent<HTMLInputElement>) => {
+    let newTime = e.target.value;
+    if (newTime === undefined || editBooking === undefined) {
+      return;
+    }
+    setEditBooking({ ...editBooking, time: newTime });
+  };
+  //Gets the changed number of guest value and sets the new value to the booking
+  const setGuests = (e: ChangeEvent<HTMLInputElement>) => {
+    let newNumberOfGuests = e.target.value;
+    if (newNumberOfGuests === undefined || editBooking === undefined) {
+      return;
+    }
+    setEditBooking({ ...editBooking, numberOfGuests: newNumberOfGuests });
+  };
+  const setName = (e: ChangeEvent<HTMLInputElement>) => {
+    let name = e.target.value;
+
+    if (name === undefined || editUser === undefined) {
+      return;
+    }
+    setEditUser({ ...editUser, name: name });
+  };
+  const setLastName = (e: ChangeEvent<HTMLInputElement>) => {
+    let name = e.target.value;
+
+    if (name === undefined || editUser === undefined) {
+      return;
+    }
+    setEditUser({ ...editUser, lastname: name });
+  };
+  const setEmail = (e: ChangeEvent<HTMLInputElement>) => {
+    let name = e.target.value;
+
+    if (name === undefined || editUser === undefined) {
+      return;
+    }
+    setEditUser({ ...editUser, email: name });
+  };
+  const setPhone = (e: ChangeEvent<HTMLInputElement>) => {
+    let name = e.target.value;
+
+    if (name === undefined || editUser === undefined) {
+      return;
+    }
+    setEditUser({ ...editUser, phone: name });
+  };
+
+//Variables with HTML as value
+  
   let deleteBookingControl = <></>;
   if (showDeleteBooking) {
     deleteBookingControl = (
@@ -249,69 +324,10 @@ export const AdminDetails = () => {
     );
   }
 
-  //Gets the changed date value and sets the new value to the booking
-  const setDateChecked = (e: ChangeEvent<HTMLInputElement>) => {
-    let newDate = e.target.value;
-    if (newDate === undefined || editBooking === undefined) {
-      return;
-    }
-    setEditBooking({ ...editBooking, date: newDate });
-  };
-
-  //Gets the changed time value and sets the new value to the booking
-  const setTimeChecked = (e: ChangeEvent<HTMLInputElement>) => {
-    let newTime = e.target.value;
-    if (newTime === undefined || editBooking === undefined) {
-      return;
-    }
-    setEditBooking({ ...editBooking, time: newTime });
-  };
-
-  //Gets the changed number of guest value and sets the new value to the booking
-  const setGuests = (e: ChangeEvent<HTMLInputElement>) => {
-    let newNumberOfGuests = e.target.value;
-
-    if (newNumberOfGuests === undefined || editBooking === undefined) {
-      return;
-    }
-    setEditBooking({ ...editBooking, numberOfGuests: newNumberOfGuests });
-  };
-
-  const setName = (e: ChangeEvent<HTMLInputElement>) => {
-    let name = e.target.value;
-
-    if (name === undefined || editUser === undefined) {
-      return;
-    }
-    setEditUser({ ...editUser, name: name });
-  };
-
-  const setLastName = (e: ChangeEvent<HTMLInputElement>) => {
-    let name = e.target.value;
-
-    if (name === undefined || editUser === undefined) {
-      return;
-    }
-    setEditUser({ ...editUser, lastname: name });
-  };
-
-  const setEmail = (e: ChangeEvent<HTMLInputElement>) => {
-    let name = e.target.value;
-
-    if (name === undefined || editUser === undefined) {
-      return;
-    }
-    setEditUser({ ...editUser, email: name });
-  };
-
-  const setPhone = (e: ChangeEvent<HTMLInputElement>) => {
-    let name = e.target.value;
-
-    if (name === undefined || editUser === undefined) {
-      return;
-    }
-    setEditUser({ ...editUser, phone: name });
-  };
+  let saveBtn = (<></>)
+  if (editOK){
+    saveBtn = <button onClick={saveChanges}>Spara ändringar</button>
+  }
 
   //The editform is only shown if the showForm value is true
   let editForm = <></>;
@@ -342,8 +358,9 @@ export const AdminDetails = () => {
             onChange={setGuests}
           ></input>
         </form>
-        <button onClick={saveChanges}>Spara ändringar</button>
+        <button onClick={checkFreeTables}>kontrollera lediga bord</button>
         <button onClick={hideEditForm}>Avbryt</button>
+        {saveBtn}
       </div>
     );
   }
@@ -395,15 +412,25 @@ export const AdminDetails = () => {
     </ul>
   );
 
+  let adminDetailsDiv = (<div>
+    <Link className="linkBackToBookings" to="/Admin">
+      Tillbaka till bokningar
+    </Link>
+    {bookingHTML}
+    {customerHTML}
+  </div>)
+  if(!showMainDiv){
+    adminDetailsDiv = (<div>
+      <p>Bookning med id: {id} är borttagen</p>
+      <Link className="linkBackToBookings" to="/Admin">
+      Tillbaka till bokningar
+      </Link>
+    </div>)
+  }
+
   return (
     <>
-      <div>
-        <Link className="linkBackToBookings" to="/Admin">
-          Tillbaka till bokningar
-        </Link>
-        {bookingHTML}
-        {customerHTML}
-      </div>
+      {adminDetailsDiv}
     </>
   );
 };
