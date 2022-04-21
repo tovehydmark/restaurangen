@@ -176,6 +176,7 @@ export function Booking() {
   const setGuests = (e: ChangeEvent<HTMLInputElement>) => {
     let guests = e.target.value;
     setNumberOfGuests(guests);
+
     if (Number(guests) > 0) {
       setShowSearch(true);
     } else {
@@ -423,7 +424,11 @@ export function Booking() {
 
   let chooseTimeLabel = <label>Välj tid:</label>;
   if (!showFirstTime && !showSecondTime) {
-    firstFreeTime = <p>Det finns inga lediga tider!</p>;
+    firstFreeTime = (
+      <p className="alertP">
+        Det finns inga lediga bord! Prova sök på en annan dag.
+      </p>
+    );
     chooseTimeLabel = <></>;
     userForm = <></>;
   }
@@ -442,9 +447,10 @@ export function Booking() {
   let guestsInput = <></>;
   if (showGuestsInput) {
     guestsInput = (
-      <div>
+      <div className="guestInputDiv">
         <label htmlFor="numberOfGuests">Antal personer: </label>
         <input
+          className="guestInput"
           required
           name="numberOfGuests"
           type="number"
@@ -483,6 +489,7 @@ export function Booking() {
   if (!showBookingDiv) {
     bookingDiv = (
       <div>
+        <div className="loader"></div>
         <p>Tack för din bokning!</p>
         <p>
           Du har bokat bord den {bookingInfo.date}, klockan {bookingInfo.time}{" "}
@@ -492,5 +499,14 @@ export function Booking() {
     );
   }
 
-  return <div>{bookingDiv}</div>;
+  return (
+    <div>
+      <h2>Boka bord</h2>
+      <p>
+        Det går även att boka bord genom att ringa till oss på{" "}
+        <a href="tel:+46 70 123 45 67">+46 70 123 45 67</a>
+      </p>
+      {bookingDiv}
+    </div>
+  );
 }

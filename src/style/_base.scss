@@ -1,28 +1,36 @@
-//För mobil-layout
-$base-padding: 8px;
-$base-font: "Roboto",
-sans-serif;
-$heading-font: "Merriweather",
-serif;
+// MOBILLÄGE //
+@mixin btn {
+    color: #fff;
+    border-radius: 8px;
+    border: none;
+    font-size: 1rem;
+    font-family: $base-font;
+    cursor: pointer;
+    padding: $base-padding;
+}
 
 // HEADER //
 header {
     font-family: $heading-font;
+    position: sticky;
+    top: 0;
     display: flex;
     justify-content: center;
-    background-color: #00817882;
+    background-color: #7dbfba;
     height: 105px;
-
+    z-index: 10;
 
 }
 
 // MAIN OUTLET //
 main {
+    text-align: center;
+    min-height: 100%;
 
     p {
         font-family: $base-font;
         font-size: 1rem;
-        // padding: $base-padding;
+        padding: $base-padding;
     }
 
     h2 {
@@ -37,6 +45,7 @@ main {
     }
 }
 
+
 // STARTSIDAN //
 
 @keyframes changeBg {
@@ -50,27 +59,27 @@ main {
     }
 
     20% {
-        right: 1280px;
+        right: 400px;
     }
 
     30% {
-        right: 1280px;
+        right: 400px;
     }
 
     40% {
-        right: 2560px;
+        right: 800px;
     }
 
     50% {
-        right: 2560px;
+        right: 800px;
     }
 
     60% {
-        right: 1280;
+        right: 400px;
     }
 
     70% {
-        right: 1280;
+        right: 400px;
     }
 
     80% {
@@ -86,22 +95,22 @@ main {
     }
 }
 
+.slideWrap {
+    margin: 0 auto;
+    max-width: 400px;
+    overflow: hidden;
+}
+
 .photoContainer {
     display: flex;
     overflow: hidden;
     margin-top: 3rem;
-    width: 4320px;
-
-
-
 
     .photos {
+        width: 400px;
         position: relative;
-        width: 1280px;
         animation: changeBg 33s ease infinite;
-
     }
-
 }
 
 .startpageTextContainer {
@@ -117,9 +126,11 @@ main {
     justify-content: center;
     text-align: left;
 
-
     .menuList {
         padding: $base-padding;
+        p {
+            padding: 0;
+        }
     }
 
     footer {
@@ -145,7 +156,6 @@ main {
 
     ul {
         list-style: none;
-        text-align: left;
     }
 
 }
@@ -153,8 +163,6 @@ main {
 .bookingDiv {
     display: flex;
     flex-direction: column;
-    gap: $base-padding * 2;
-    // justify-content: center;
     align-items: center;
     padding: $base-padding;
 
@@ -163,6 +171,10 @@ main {
         font-size: 1rem;
         padding-top: $base-padding;
         margin-top: $base-padding * 2;
+    }
+
+    .guestInputDiv {
+        width: 45vw;
     }
 
     input {
@@ -177,14 +189,41 @@ main {
         input {
             width: 45vw;
         }
-
     }
 
+    .alertP {
+        color: $warningBtn-color;
+        font-weight: bold;
+    }
+
+   .loader{
+       border: 10px solid $baseBtn-color;
+       border-top: 10px solid $warningBtn-color;
+       border-radius: 50%;
+       width: 80px;
+       height: 80px;
+       animation: spin 1s linear infinite;
+   }
+
+   @keyframes spin {
+       0% {
+           transform: rotate(0deg);
+       }
+       100% {
+           transform: rotate(360deg);
+       }
+   }
+    
     .bookingUserForm {
         display: flex;
         flex-direction: column;
         align-items: center;
-
+        .gdpr {
+            width: 45vw;
+            input{
+                width: 20px;
+            }
+        }
         input {
             width: 45vw;
         }
@@ -232,73 +271,102 @@ main {
         }
 
         .errorMessage {
-            color: #CF1D15;
+            color: $warningBtn-color;
             font-family: $base-font;
             margin-top: 0;
             padding-top: 0;
         }
+        
 
         .bookingBtn {
-            background-color: #008178;
-            color: #FFF;
-            border-radius: 8px;
-            border: none;
-            font-size: 1rem;
-            font-family: $base-font;
-            cursor: pointer;
+            background-color: $baseBtn-color;
+            @include btn;
             width: 80px;
         }
     }
 }
 
 // ADMINSIDAN //
-.linkBackToBookings {
-    color: #000;
-    font-weight: 700;
-    font-size: 1.4rem;
-    margin: 1rem;
+.showBookingsBtn {
     display: inline-block;
+    margin: $base-padding;
+    text-decoration: none;
+    background-color: $baseBtn-color;
+    @include btn;
 }
 
-.showBookingsBtn {
-    background-color: #008178;
-    color: #fff;
-    border-radius: 8px;
-    border: none;
-    font-size: 1rem;
-    font-family: "Roboto", sans-serif;
-    cursor: pointer;
+.bookingInList {
+    list-style-type: none;
+    padding: 0;
+    margin-top: $base-padding *3;
+}
+
+// ADMIN--BOOKINGINFO //
+.linkBackToBookings {
+    color: #000;
+    font-family: $heading-font;
+    font-weight: 700;
+    font-size: 1.4rem;
+    margin: $base-padding *4;
     display: inline-block;
-    margin: 1rem;
-    padding: $base-padding;
-    text-decoration: none;
 }
 
 .changeBtn {
-    background-color: #008178;
-    color: #fff;
-    border-radius: 8px;
-    border: none;
-    font-size: 1rem;
-    font-family: "Roboto", sans-serif;
-    cursor: pointer;
-    padding: $base-padding;
+    background-color: $baseBtn-color;
+    @include btn;
 }
 
 .deleteBtn {
-    background-color: #CF1D15;
-    color: #fff;
-    border-radius: 8px;
-    border: none;
-    font-size: 1rem;
-    font-family: "Roboto", sans-serif;
-    cursor: pointer;
-    padding: $base-padding;
+    background-color: $warningBtn-color;
+    @include btn;
+    margin: $base-padding;
+}
+
+.adminForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: $base-padding;
+
+    input {
+        width: 45vw;
+        padding: $base-padding;
+        margin: $base-padding;
+    }
+
+}
+
+.detailsInList {
+    list-style-type: none;
+    width: 25vw;
+    padding: 0;
+    margin: 0 auto;
+
+    li{
+        text-align: left;
+        button{
+            margin-top: $base-padding;
+            margin-bottom: $base-padding * 2;
+        }
+    }
+    
+   
 }
 
 // FOOTER //
 footer {
     font-family: $base-font;
     background-color: #00817814;
+    position: sticky;
+    width: 100%;
+    top: 100vh;
+    margin-top: $base-padding * 4;
+}
 
+.footerPhone {
+    padding-top: 1rem;
+}
+
+.bodyContainer {
+    min-height: 100vh;
 }

@@ -15,31 +15,31 @@ header {
     }
 
     20% {
-        right: 1280px;
+        right: 700px;
     }
 
     30% {
-        right: 1280px;
+        right: 700px;
     }
 
     40% {
-        right: 2560px;
+        right: 1400px;
     }
 
     50% {
-        right: 2560px;
+        right: 1400px;
     }
 
     60% {
-        right: 1280px;
+        right: 700px;
     }
 
     70% {
-        right: 1280px;
+        right: 700px;
     }
 
     80% {
-        right: 1280px;
+        right: 700px;
     }
 
     90% {
@@ -52,7 +52,7 @@ header {
 }
 
 .slideWrap {
-    max-width: 1280px;
+    max-width: 700px;
     overflow: hidden;
     margin: 0 auto;
 }
@@ -61,13 +61,13 @@ header {
 
     .photos {
         position: relative;
-        width: 1280px;
+        width: 700px;
         animation: changeBg 33s ease infinite;
     }
 }
 
 .startpageTextContainer {
-    padding: $base-padding * 4 $base-padding * 36;
+    padding: $base-padding * 4 $base-padding * 8;
     line-height: $base-padding * 3;
 }
 
@@ -77,37 +77,11 @@ header {
     flex-direction: row;
     text-align: left;
     justify-content: center;
-    gap: 10rem;
+    gap: $base-padding *2;
+    margin: 0 $base-padding *6;
 
     .menuList {
         width: 260px;
         padding: $base-padding;
     }
-}
-
-// ADMIN //
-.bookingInList{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    li{
-        width: 19vw;
-        text-align: left;
-
-    }
-    .showBookingsBtn {
-        width: 19vw;
-        margin: 0;
-    }
-}
-
-// FOOTER //
-footer {
-    display: flex;
-    justify-content: space-around;
-    align-items: center; 
-}
-
-.bodyContainer {
-    min-height: 100vh;
 }

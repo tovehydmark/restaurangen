@@ -1,7 +1,13 @@
 @import url("https://fonts.googleapis.com/css2?family=Merriweather&family=Roboto&display=swap");
 
+@import "_variables";
+
 @import "_base";
 
-@media screen and (min-width: 1024px) {
+@media screen and (min-width: 768px) {
+    @import "_tablet";
+}
+
+@media screen and (min-width: 1290px) {
     @import "_desktop";
 }
