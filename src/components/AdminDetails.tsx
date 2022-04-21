@@ -3,7 +3,6 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { resId, url } from "../services/createRestaurant";
 import { RestaurantBooking } from "./Admin";
-import { Button } from "./styledComponents/Button";
 
 export class Customer {
   constructor(
@@ -47,7 +46,7 @@ function canBeBooked(numberOfGuests: number, tablesBooked: number) {
 }
 
 export const AdminDetails = () => {
-//useStates and useEffects
+  //useStates and useEffects
   const [bookings, setBookings] = useState<RestaurantBooking[]>([]);
   const [booking, setBooking] = useState<RestaurantBooking>();
   const [customer, setCustomer] = useState<Customer>();
@@ -110,7 +109,7 @@ export const AdminDetails = () => {
     });
   }, [booking, id]);
 
-//Functions
+  //Functions
   //Shows the edit form
   function showEditForm() {
     setShowForm(true);
@@ -135,12 +134,12 @@ export const AdminDetails = () => {
       return;
     }
     // Removes the bookings we are chaning from the list of bookings.
-    // This makes the count of free tables accurate. 
-    for (let i = 0; i < bookings.length; i++){
-      if(bookings[i]._id === editBooking._id){
-        bookings.splice(i,1);
-      };    
-    };
+    // This makes the count of free tables accurate.
+    for (let i = 0; i < bookings.length; i++) {
+      if (bookings[i]._id === editBooking._id) {
+        bookings.splice(i, 1);
+      }
+    }
     //creates a filtred list for the date of the edited booking
     let bookedTables = bookings.filter((x) => x.date === editBooking.date);
     //Finds the objekt in bookings that matches the booking we're editing
@@ -150,20 +149,20 @@ export const AdminDetails = () => {
     // if (
     //   Number(thisBooking?.numberOfGuests) < Number(editBooking.numberOfGuests)
     // ) {
-      //Sets the editOK to true or false by checking if there is enough tables
-      setEditOK(
-        canBeBooked(
-          Number(editBooking.numberOfGuests),
-          countTables(bookedTables.filter((x) => x.time === editBooking.time))
-        )       
-      );
-      console.log(editOK);
+    //Sets the editOK to true or false by checking if there is enough tables
+    setEditOK(
+      canBeBooked(
+        Number(editBooking.numberOfGuests),
+        countTables(bookedTables.filter((x) => x.time === editBooking.time))
+      )
+    );
+    console.log(editOK);
     // }
     // //if the number of guests is decreased no table check is needed
     // else {
     //   setEditOK(true);
     // };
-  };
+  }
 
   //Saves and sends edited booking to API
   function saveChanges() {
@@ -190,7 +189,7 @@ export const AdminDetails = () => {
         .then((response) => {
           console.log(response.data);
         });
-      //Renders the changes   
+      //Renders the changes
       setBooking(updatedBooking);
       //hides form and save button
       setEditOK(false);
@@ -201,8 +200,8 @@ export const AdminDetails = () => {
       console.log(
         "Det finns inga lediga bord för den här ändringen, försök med en annan dag eller tid"
       );
-    };
-  };
+    }
+  }
 
   //Saves and sends edited customer to API
   function saveUserChanges() {
@@ -223,7 +222,7 @@ export const AdminDetails = () => {
       .then((response) => {
         console.log(response.data);
       });
-    //Renders updates  
+    //Renders updates
     setCustomer(updatedCustomer);
     //Hides edit form
     setShowUserForm(false);
@@ -240,20 +239,20 @@ export const AdminDetails = () => {
     setShowMainDiv(false);
     if (editBooking === undefined) {
       return;
-    };
+    }
     //Deletes booking from API
-    axios.delete(url + "booking/delete/" + editBooking._id).then((response) => {
-    });
+    axios
+      .delete(url + "booking/delete/" + editBooking._id)
+      .then((response) => {});
     console.log("Bokning borttagen");
-  };
+  }
 
   //Hides delete booking check
   function cancelDeleteBooking() {
     setShowDeleteBooking(false);
-  };
+  }
 
- 
-//Anonymous functions that targets values changed in forms.
+  //Anonymous functions that targets values changed in forms.
   //Gets the changed date value and sets the new value to the booking
   const setDateChecked = (e: ChangeEvent<HTMLInputElement>) => {
     let newDate = e.target.value;
@@ -311,22 +310,26 @@ export const AdminDetails = () => {
     setEditUser({ ...editUser, phone: name });
   };
 
-//Variables with HTML as value
-  
+  //Variables with HTML as value
+
   let deleteBookingControl = <></>;
   if (showDeleteBooking) {
     deleteBookingControl = (
       <div>
         <p>Bekräfta ta bort bokning</p>
-        <button onClick={deleteBooking}>Bekräfta</button>
-        <button onClick={cancelDeleteBooking}>Avbryt</button>
+        <button className="changeBtn" onClick={deleteBooking}>
+          Bekräfta
+        </button>
+        <button className="deleteBtn" onClick={cancelDeleteBooking}>
+          Avbryt
+        </button>
       </div>
     );
   }
 
-  let saveBtn = (<></>)
-  if (editOK){
-    saveBtn = <button onClick={saveChanges}>Spara ändringar</button>
+  let saveBtn = <></>;
+  if (editOK) {
+    saveBtn = <button onClick={saveChanges}>Spara ändringar</button>;
   }
 
   //The editform is only shown if the showForm value is true
@@ -334,8 +337,15 @@ export const AdminDetails = () => {
   if (showForm) {
     editForm = (
       <div>
-        <form>
+        <form className="adminForm">
           <input type="date" onChange={setDateChecked} />
+          <input
+            name="numberOfGuests"
+            type="number"
+            min="1"
+            max="90"
+            onChange={setGuests}
+          ></input>
           <label htmlFor="time">18.00</label>
           <input
             type="radio"
@@ -350,16 +360,13 @@ export const AdminDetails = () => {
             value="21.00"
             onChange={setTimeChecked}
           />
-          <input
-            name="numberOfGuests"
-            type="number"
-            min="1"
-            max="90"
-            onChange={setGuests}
-          ></input>
         </form>
-        <button onClick={checkFreeTables}>kontrollera lediga bord</button>
-        <button onClick={hideEditForm}>Avbryt</button>
+        <button className="changeBtn" onClick={checkFreeTables}>
+          kontrollera lediga bord
+        </button>
+        <button className="deleteBtn" onClick={hideEditForm}>
+          Avbryt
+        </button>
         {saveBtn}
       </div>
     );
@@ -369,68 +376,82 @@ export const AdminDetails = () => {
   if (showUserForm) {
     editUserForm = (
       <div>
-        <form>
+        <form className="adminForm">
+          <label>Förnamn: </label>
           <input type="text" placeholder="Förnamn" onChange={setName} />
+          <label>Efternamn: </label>
           <input type="text" placeholder="Efternamn" onChange={setLastName} />
+          <label>Email: </label>
           <input type="text" placeholder="Email" onChange={setEmail} />
+          <label>Telefon: </label>
           <input type="text" placeholder="Telefon" onChange={setPhone} />
         </form>
-        <button onClick={saveUserChanges}>Spara ändringar</button>
-        <button onClick={hideEditUserForm}>Avbryt</button>
+        <button className="changeBtn" onClick={saveUserChanges}>
+          Spara ändringar
+        </button>
+        <button className="deleteBtn" onClick={hideEditUserForm}>
+          Avbryt
+        </button>
       </div>
     );
   }
 
   let bookingHTML = (
-    <ul>
+    <ul className="detailsInList">
       <li>Boknings id: {id}</li>
       <li>Datum: {booking?.date}</li>
       <li>Tid: {booking?.time}</li>
       <li>Antal gäster: {booking?.numberOfGuests}</li>
-      <button className="changeBtn" onClick={showEditForm}>
-        Ändra bokning
-      </button>
-      <button className="deleteBtn" onClick={deleteBookingCheck}>
-        Ta bort bokning
-      </button>
+      <li>
+        <button className="changeBtn" onClick={showEditForm}>
+          Ändra bokning
+        </button>
+        <button className="deleteBtn" onClick={deleteBookingCheck}>
+          Ta bort bokning
+        </button>
+      </li>
+
       {deleteBookingControl}
       {editForm}
     </ul>
   );
 
   let customerHTML = (
-    <ul className="bookingInList">
+    <ul className="detailsInList">
       <li>KundId: {booking?.customerId}</li>
       <li>Förnamn: {customer?.name}</li>
       <li>Efternamn: {customer?.lastname}</li>
       <li>Email: {customer?.email}</li>
       <li>Telefonnr: {customer?.phone}</li>
-      <button className="changeBtn" onClick={showEditUserForm}>
-        Ändra kunduppgifter
-      </button>
+      <li>
+        <button className="changeBtn" onClick={showEditUserForm}>
+          Ändra kunduppgifter
+        </button>
+      </li>
+
       {editUserForm}
     </ul>
   );
 
-  let adminDetailsDiv = (<div>
-    <Link className="linkBackToBookings" to="/Admin">
-      Tillbaka till bokningar
-    </Link>
-    {bookingHTML}
-    {customerHTML}
-  </div>)
-  if(!showMainDiv){
-    adminDetailsDiv = (<div>
-      <p>Bookning med id: {id} är borttagen</p>
+  let adminDetailsDiv = (
+    <div>
       <Link className="linkBackToBookings" to="/Admin">
-      Tillbaka till bokningar
+        Tillbaka till bokningar
       </Link>
-    </div>)
+      {bookingHTML}
+      {customerHTML}
+    </div>
+  );
+  if (!showMainDiv) {
+    adminDetailsDiv = (
+      <div>
+        <p>Bookning med id: {id} är borttagen</p>
+        <Link className="linkBackToBookings" to="/Admin">
+          Tillbaka till bokningar
+        </Link>
+      </div>
+    );
   }
 
-  return (
-    <>
-      {adminDetailsDiv}
-    </>
-  );
+  return <>{adminDetailsDiv}</>;
 };

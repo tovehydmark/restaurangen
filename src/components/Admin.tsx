@@ -89,5 +89,10 @@ export function Admin() {
     );
   });
 
-  return <div>{lis}</div>;
+  return (
+    <div>
+      <h2>Admin</h2>
+      {lis}
+    </div>
+  );
 }

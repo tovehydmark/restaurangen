@@ -1,31 +1,10 @@
 import "../style/style.scss";
-import styled, { keyframes } from "styled-components";
 // import { createRestaurant } from "../services/createRestaurant";
 import fishImg from "../images/fishfood.png";
 import seafoodImg from "../images/seafood.png";
 import tableImg from "../images/table.png";
 
-// // STYLING (fixa keyframes sist) //
-// const changeBg = keyframes `
-//     0%, 10% {right: 0px;}
-//     20%, 30% {right: 1440px;}
-//     40%, 50% {right: 2880px;}
-//     60%, 70%  {right: 1440;}
-//     80%, 90%, 100% {right: 0px;}
-// `;
-// //kan flytta dessa till styled mapp när vi fått det att funka
-// export const Image = styled.img`
-//   position: relative;
-//   width: 1440px;
-//   animation: ${changeBg} 33s ease infinite;
-// `;
-// export const DivImg = styled.div`
-//   display: flex;
-//   overflow: hidden;
-//   margin-top: 3rem;
-//   width: 4320px;
-// `;
-
+//Images for slider
 const imageSlides = [
   { image: fishImg },
   { image: seafoodImg },
@@ -33,21 +12,24 @@ const imageSlides = [
 ];
 
 export function Home() {
+  //Create the restaurant by posting to API once
   // createRestaurant();
 
   return (
     <>
-      <div className="photoContainer">
-        {imageSlides.map((slide, i) => {
-          return (
-            <img
-              className="photos"
-              key={i}
-              src={slide.image}
-              alt="dining photos"
-            />
-          );
-        })}
+      <div className="slideWrap">
+        <div className="photoContainer">
+          {imageSlides.map((slide, i) => {
+            return (
+              <img
+                className="photos"
+                key={i}
+                src={slide.image}
+                alt="dining photos"
+              />
+            );
+          })}
+        </div>
       </div>
       <section className="startpageTextContainer">
         <h2>The CodFather</h2>
@@ -59,14 +41,14 @@ export function Home() {
           yellow-edged moray yellowtail barracuda. Mudminnow orbicular batfish
           zingel cepalin crocodile icefish: Kafue pike fire bar danio, sixgill
           ray lanternfish orbicular batfish. Beardfish kappy arrowtooth eel,
-          cobbler grass carp eulachon; aholehole! Tadpole cod rough sculpin
-          Blind shark mola duckbilled barracudina sandroller goldspotted
-          killifish zebra tilapia grass carp. Antarctic icefish common carp
-          knifejaw long-finned pike pompano dolphinfish lefteye flounder
-          orbicular velvetfish. Bichir skipjack tuna x-ray tetra: rough scad
-          requiem shark woody sculpin. Mudskipper, golden dojo. Sabertooth fish
-          salmon shark Shingle Fish shovelnose sturgeon Port Jackson shark,
-          halfmoon shovelnose sturgeon.
+          cobbler grass carp eulachon; aholehole!
+          <br /> Tadpole cod rough sculpin Blind shark mola duckbilled
+          barracudina sandroller goldspotted killifish zebra tilapia grass carp.
+          Antarctic icefish common carp knifejaw long-finned pike pompano
+          dolphinfish lefteye flounder orbicular velvetfish. Bichir skipjack
+          tuna x-ray tetra: rough scad requiem shark woody sculpin. Mudskipper,
+          golden dojo. Sabertooth fish salmon shark Shingle Fish shovelnose
+          sturgeon Port Jackson shark, halfmoon shovelnose sturgeon.
         </p>
       </section>
     </>

@@ -20,8 +20,8 @@ export function Contact() {
   return (
     <div>
       <h2>Kontakt</h2>
-      {getAddress.map((address) => (
-        <div>
+      {getAddress.map((address, i) => (
+        <div key={i}>
           <p>
             {address.address}
             <br />
@@ -29,7 +29,9 @@ export function Contact() {
             <br />
             {address.city}
             <br />
-            Telefon: 070 123 45 67 Öppettider:
+            Telefon: +46 70 123 45 67
+            <br />
+            Öppettider:
             <br />
             Mån-Tors: 11.00 - 22.00
             <br />
