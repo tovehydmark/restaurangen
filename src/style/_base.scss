@@ -20,6 +20,15 @@ header {
     height: 105px;
     z-index: 10;
 
+    .burger1 {
+        transform: "rotate(45deg)"};
+      
+      .burger2 {
+        transform: "translateX(100%)"};
+      
+      .burger {
+        transform: "rotate(-45deg)";
+      }
 }
 
 // MAIN OUTLET //
@@ -159,7 +168,24 @@ main {
     }
 
 }
+.loader{
+    border: 5px solid #7dbfba;
+    border-top: 5px solid $baseBtn-color;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
 
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
 .bookingDiv {
     display: flex;
     flex-direction: column;
@@ -196,23 +222,7 @@ main {
         font-weight: bold;
     }
 
-   .loader{
-       border: 10px solid $baseBtn-color;
-       border-top: 10px solid $warningBtn-color;
-       border-radius: 50%;
-       width: 80px;
-       height: 80px;
-       animation: spin 1s linear infinite;
-   }
-
-   @keyframes spin {
-       0% {
-           transform: rotate(0deg);
-       }
-       100% {
-           transform: rotate(360deg);
-       }
-   }
+   
     
     .bookingUserForm {
         display: flex;
@@ -355,12 +365,16 @@ main {
 
 // FOOTER //
 footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     font-family: $base-font;
     background-color: #00817814;
     position: sticky;
     width: 100%;
     top: 100vh;
     margin-top: $base-padding * 4;
+  
 }
 
 .footerPhone {

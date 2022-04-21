@@ -53,11 +53,8 @@ export function Booking() {
   const [showUserForm, setShowUserForm] = useState(false);
   const [showBookTableDiv, setShowTableDiv] = useState(false);
   const [showBookingDiv, setShowBookingDiv] = useState(true);
-  const [bookingInfo, setBookingInfo] = useState<BookingInfo>({
-    date: "",
-    time: "",
-    numberOfGuests: "",
-  });
+  const [bookingMade, setBookingMade] = useState<BookingInfo>();
+  const [showLoader, setShowLoader] = useState(false);
   const [bookings, setBookings] = useState<Bookings[]>([]);
   const [showGuestsInput, setShowGuestsInput] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
@@ -121,19 +118,6 @@ export function Booking() {
   let todaysDate = new Date();
   let todaysDateToString = "";
 
-  //Okej, så insåg att om vi ska använda react kalendern måste datum konverteras till rätt format (en sträng)
-  //samt att jag inte har så bra koll på hur man kontrollerar att ett datum inte passerat osv..
-  // Men man kan använda input type text istället som retunerar rätt format direkt och verkar enklare att kontrollera.
-  // Kanske värt att satsa på istället?
-
-  // function getFreeTables(value: Date) {
-  //   setDate(value);
-  //   dateToString(value);
-
-  //   let checkDate = yearToString + monthToString + dayToString;
-  //   console.log(checkDate);
-  // }
-
   // Konverterar Date till en sträng i samma format som API:et använder
   function dateToString(value: Date) {
     if (value.getDate() < 10) {
@@ -153,12 +137,6 @@ export function Booking() {
   }
 
   dateToString(todaysDate);
-
-  //Skapar en ny användare genom att hämta värden från formulär
-  // const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-  //   let name = e.target.name;
-  //   setNewUser({...newUser, [name]: e.target.value})
-  // }
 
   //Kontrollerar och uppdaterar vald tid för bokning
   const setTimeChecked = (e: ChangeEvent<HTMLInputElement>) => {
@@ -197,6 +175,9 @@ export function Booking() {
   };
 
   function sendBooking(createBooking: INewBooking) {
+    if (bookingMade === undefined) {
+      setShowLoader(true);
+    }
     axios
       .post(
         "https://school-restaurant-api.azurewebsites.net/booking/create",
@@ -214,7 +195,8 @@ export function Booking() {
       )
       .then((response) => {
         let bookingInfoFromApi = response.data[0];
-        setBookingInfo(bookingInfoFromApi);
+        setBookingMade(bookingInfoFromApi);
+        setShowLoader(false);
       });
   }
 
@@ -467,6 +449,11 @@ export function Booking() {
     searchBtn = <Button onClick={checkFreeTables}>Sök tider</Button>;
   }
 
+  let loader = <></>;
+  if (showLoader) {
+    loader = <div className="loader"></div>;
+  }
+
   let bookingDiv = (
     <div className="bookingDiv">
       <form className="bookingSearchForm">
@@ -489,11 +476,11 @@ export function Booking() {
   if (!showBookingDiv) {
     bookingDiv = (
       <div>
-        <div className="loader"></div>
+        {loader}
         <p>Tack för din bokning!</p>
         <p>
-          Du har bokat bord den {bookingInfo.date}, klockan {bookingInfo.time}{" "}
-          för {bookingInfo.numberOfGuests} personer.
+          Du har bokat bord den {bookingMade?.date}, klockan {bookingMade?.time}{" "}
+          för {bookingMade?.numberOfGuests} personer.
         </p>
       </div>
     );
@@ -506,6 +493,7 @@ export function Booking() {
         Det går även att boka bord genom att ringa till oss på{" "}
         <a href="tel:+46 70 123 45 67">+46 70 123 45 67</a>
       </p>
+
       {bookingDiv}
     </div>
   );
