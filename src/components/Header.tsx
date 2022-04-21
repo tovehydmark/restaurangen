@@ -6,6 +6,7 @@ import { HamburgerDiv } from "./styledComponents/HamburgerDiv";
 
 //All styling for the navigation is in the header component as a state variable is used to toggle the hamburger-menu. Instead of having some styling in this component, and some in a css file, we made the choice to gather it all in one place for a better structure.
 
+//Some styling in base.scss though.. lös kanske?
 export function Header() {
   const [hamburgerOpen, setHamburgerOpen] = useState(false);
 
@@ -94,50 +95,19 @@ export function Header() {
     }
   `;
 
+  //Kanske flytta denna styling också
   const HamburgerContainer = styled.div`
     display: none;
     @media (max-width: 1023px) {
       width: 40px;
       display: fixed;
+      display: flex;
+      flex-wrap: wrap;
       margin: 16px 0 0 8px;
       top: 0;
       right: 0;
       z-index: 10;
     }
-  `;
-
-  // const HamburgerDiv = styled.div`
-  //   width: 2rem;
-  //   height: 2rem;
-  //   display: flex;
-  //   justify-content: space-around;
-  //   flex-flow: column nowrap;
-  //   z-index: 10;
-  // `;
-
-  const Burger = styled.div`
-    width: 2rem;
-    height: 0.25 rem;
-    border-radius: 10px;
-    background-color: black;
-    border: 2px black solid;
-    /* transform-origin: 1px;
-    transition: all 0.3s linear; */
-    z-index: 100;
-    /* #burger1 {
-      transform: ${hamburgerOpen ? "rotate(45deg)" : "rotate(0)"};
-    }
-    #burger2 {
-      transform: ${hamburgerOpen ? "translateX(100%)" : "translateX(0)"};
-      opacity: ${hamburgerOpen ? 0 : 1};
-    }
-    #burger {
-      transform: ${hamburgerOpen ? "rotate(-45deg)" : "rotate(0)"};
-    } */
-
-    /* border: ${hamburgerOpen ? "2px red solid" : "2px black solid"};
-
-    transform: ${!hamburgerOpen ? "rotate(45deg)" : "rotate(0deg)"}; */
   `;
 
   return (
@@ -182,11 +152,6 @@ export function Header() {
         <p>The Codfather</p>
         <HamburgerContainer onClick={toggleHamburger}>
           <HamburgerDiv isOpen={hamburgerOpen}></HamburgerDiv>
-          {/* <HamburgerDiv className="hamburger">
-            <Burger id="burger1"></Burger>
-            <Burger id="burger2"></Burger>
-            <Burger id="burger3"></Burger>
-          </HamburgerDiv> */}
         </HamburgerContainer>
       </Nav>
     </header>
