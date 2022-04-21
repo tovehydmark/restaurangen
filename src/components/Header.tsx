@@ -2,6 +2,7 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import "../style/style.scss";
+import { HamburgerDiv } from "./styledComponents/HamburgerDiv";
 
 //All styling for the navigation is in the header component as a state variable is used to toggle the hamburger-menu. Instead of having some styling in this component, and some in a css file, we made the choice to gather it all in one place for a better structure.
 
@@ -105,14 +106,14 @@ export function Header() {
     }
   `;
 
-  const HamburgerDiv = styled.div`
-    width: 2rem;
-    height: 2rem;
-    display: flex;
-    justify-content: space-around;
-    flex-flow: column nowrap;
-    z-index: 10;
-  `;
+  // const HamburgerDiv = styled.div`
+  //   width: 2rem;
+  //   height: 2rem;
+  //   display: flex;
+  //   justify-content: space-around;
+  //   flex-flow: column nowrap;
+  //   z-index: 10;
+  // `;
 
   const Burger = styled.div`
     width: 2rem;
@@ -123,19 +124,20 @@ export function Header() {
     /* transform-origin: 1px;
     transition: all 0.3s linear; */
     z-index: 100;
-    /* .burger1 {
-      transform: ${hamburgerOpen ? "rotate(45deg)" : "(rotate(0)"};
+    /* #burger1 {
+      transform: ${hamburgerOpen ? "rotate(45deg)" : "rotate(0)"};
     }
-    .burger2 {
-      transform: ${hamburgerOpen ? "translateX(100%)" : "(translateX(0)"};
+    #burger2 {
+      transform: ${hamburgerOpen ? "translateX(100%)" : "translateX(0)"};
       opacity: ${hamburgerOpen ? 0 : 1};
     }
-    .burger {
-      transform: ${hamburgerOpen ? "rotate(-45deg)" : "(rotate(0)"};
+    #burger {
+      transform: ${hamburgerOpen ? "rotate(-45deg)" : "rotate(0)"};
     } */
 
-    border: ${hamburgerOpen ? "2px red solid" : "2px black solid"};
-    /* transform: ${!hamburgerOpen ? "rotate(45deg)" : "(rotate(0deg)"}; */
+    /* border: ${hamburgerOpen ? "2px red solid" : "2px black solid"};
+
+    transform: ${!hamburgerOpen ? "rotate(45deg)" : "rotate(0deg)"}; */
   `;
 
   return (
@@ -179,11 +181,12 @@ export function Header() {
         </Ul>
         <p>The Codfather</p>
         <HamburgerContainer onClick={toggleHamburger}>
-          <HamburgerDiv className="hamburger">
-            <Burger className="burger burger1"></Burger>
-            <Burger className="burger burger2"></Burger>
-            <Burger className="burger burger3"></Burger>
-          </HamburgerDiv>
+          <HamburgerDiv isOpen={hamburgerOpen}></HamburgerDiv>
+          {/* <HamburgerDiv className="hamburger">
+            <Burger id="burger1"></Burger>
+            <Burger id="burger2"></Burger>
+            <Burger id="burger3"></Burger>
+          </HamburgerDiv> */}
         </HamburgerContainer>
       </Nav>
     </header>

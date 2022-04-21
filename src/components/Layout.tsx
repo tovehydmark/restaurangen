@@ -1,6 +1,10 @@
 import { Outlet } from "react-router-dom";
 import { Header } from "./Header";
-//import {FaFacebookSquare} from "react-icons/fa";
+import {
+  FaFacebookSquare,
+  FaInstagramSquare,
+  FaPhoneSquareAlt,
+} from "react-icons/fa";
 import "../style/style.scss";
 
 export function Layout() {
@@ -11,7 +15,9 @@ export function Layout() {
         <Outlet></Outlet>
       </main>
       <footer>
-        <p className="footerPhone">+46 70 123 45 67</p>
+        <p className="footerPhone">
+          <FaPhoneSquareAlt color="black" size={20} /> +46 70 123 45 67
+        </p>
 
         <p className="footerOpenHours">
           Öppettider:
@@ -21,11 +27,11 @@ export function Layout() {
           Fre-Sön: 11.00 - 23.00
         </p>
         <div>
-          <a href="#" className="footerFacebook">
-            Facebook
+          <a href="https://youtu.be/dQw4w9WgXcQ" className="footerFacebook">
+            <FaFacebookSquare color="black" size={40} />
           </a>
-          <a href="#" className="footerInstagram">
-            Instagram
+          <a href="https://youtu.be/dQw4w9WgXcQ" className="footerInstagram">
+            <FaInstagramSquare color="black" size={40} />
           </a>
         </div>
       </footer>

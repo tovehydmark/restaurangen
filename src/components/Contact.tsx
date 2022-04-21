@@ -28,7 +28,8 @@ export function Contact() {
             {address.zip}
             <br />
             {address.city}
-            <br />
+          </p>
+          <p>
             Telefon: +46 70 123 45 67
             <br />
             Öppettider:
