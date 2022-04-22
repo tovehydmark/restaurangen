@@ -1,10 +1,12 @@
+import "../style/style.scss";
+
 interface IHamburgerProps {
   isOpen: boolean;
 }
 
 //Styling for classes in the hamburger div is in _base.scss file
 
-export function HamburgerDiv(props: IHamburgerProps) {
+export function Hamburger(props: IHamburgerProps) {
   return (
     <div className="containerForBurger">
       <div className={`${props.isOpen ? " burger1" : "burger"}`}></div>
