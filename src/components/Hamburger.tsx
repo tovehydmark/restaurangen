@@ -4,11 +4,11 @@ interface IHamburgerProps {
   isOpen: boolean;
 }
 
-//Styling for classes in the hamburger div is in _base.scss file
+//Bars in the hamburger, different classNames to enable animation
 
 export function Hamburger(props: IHamburgerProps) {
   return (
-    <div className="containerForBurger">
+    <div>
       <div className={`${props.isOpen ? " burger1" : "burger"}`}></div>
       <div className={`${props.isOpen ? " burger2" : "burger"}`}></div>
       <div className={`${props.isOpen ? " burger3" : "burger"}`}></div>
