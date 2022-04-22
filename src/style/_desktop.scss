@@ -2,6 +2,16 @@
 header {
     align-items: center;
 
+    .navigation {
+        width: 100%;
+        height: 70px;
+
+        p {
+            display: none;
+        }
+    }
+
+    //Classes assigned to navigation when hamburger is opened or closed
     .hide {
         display: flex;
         flex-direction: row;

@@ -24,6 +24,27 @@ header {
         color: black;
     }
 
+    //Navigation
+    .navigation {
+        width: 40px;
+        position: absolute;
+        right: 10px;
+        align-items: flex-end;
+
+        p {
+            margin: 0;
+            position: fixed;
+            left: 16px;
+            font-size: 1.5rem;
+            top: 17px;
+        }
+
+        //Active link shows underline, changed from Link to NavLink for boolean isActive
+        .link-active {
+            text-decoration: underline black solid 2px;
+        }
+    }
+
     //Classes assigned to navigation when hamburger is opened or closed
     .hide {
         display: none;
