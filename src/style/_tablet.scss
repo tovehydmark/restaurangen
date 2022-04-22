@@ -1,9 +1,17 @@
 // HEADER //
 header {
-    align-items: center;
+    .show {
+        display: flex;
+        flex-direction: row;
+
+        a {
+            margin-right: 30px;
+        }
+    }
 }
 
-// STARTSIDAN //
+
+// START PAGE //
 @keyframes changeBg {
 
     0% {
@@ -56,6 +64,7 @@ header {
     overflow: hidden;
     margin: 0 auto;
 }
+
 .photoContainer {
     margin-top: 3rem;
 
@@ -71,7 +80,13 @@ header {
     line-height: $base-padding * 3;
 }
 
-// MENYSIDAN //
+// CONTACTPAGE //
+.mapImg {
+    width: 600px;
+}
+
+
+// MENU PAGE //
 .menuContainer {
     display: flex;
     flex-direction: row;
@@ -84,4 +99,12 @@ header {
         width: 260px;
         padding: $base-padding;
     }
+}
+
+// FOOTER //
+footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
 }

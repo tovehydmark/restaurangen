@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import torskhamn from "../images/torskhamn.png";
 
 export function Contact() {
   const [getAddress, setGetAddress] = useState<any[]>([]);
@@ -32,6 +33,9 @@ export function Contact() {
           <p>
             Telefon: +46 70 123 45 67
             <br />
+            Email: TheCodfather@somedomain.se
+          </p>
+          <p>
             Öppettider:
             <br />
             Mån-Tors: 11.00 - 22.00
@@ -40,6 +44,7 @@ export function Contact() {
           </p>
         </div>
       ))}
+      <img className="mapImg" src={torskhamn} />
     </div>
   );
 }

@@ -1,7 +1,26 @@
 // HEADER //
 header {
     align-items: center;
+
+    .hide {
+        display: flex;
+        flex-direction: row;
+
+        a {
+            margin-right: 30px;
+        }
+    }
+
+    .show {
+        display: flex;
+        flex-direction: row;
+
+        a {
+            margin-right: 30px;
+        }
+    }
 }
+
 
 // STARTSIDAN //
 @keyframes changeBg {
@@ -56,6 +75,7 @@ header {
     overflow: hidden;
     margin: 0 auto;
 }
+
 .photoContainer {
     margin-top: 3rem;
 
@@ -71,7 +91,13 @@ header {
     line-height: $base-padding * 3;
 }
 
-// MENYSIDAN //
+// CONTACTPAGE //
+.mapImg {
+    width: 900px;
+}
+
+
+// MENUPAGE //
 .menuContainer {
     display: flex;
     flex-direction: row;
@@ -85,19 +111,43 @@ header {
     }
 }
 
-// ADMIN //
-.bookingInList{
+// ADMINPAGE //
+.bookingInList {
     display: flex;
     flex-direction: row;
     align-items: center;
-    li{
+
+    li {
         width: 19vw;
         text-align: left;
 
     }
+
     .showBookingsBtn {
         width: 19vw;
         margin: 0;
+    }
+}
+
+// NOTFOUNDPAGE //
+.notfoundContainer {
+
+    .crabImg {
+        width: 400px;
+    }
+
+    h1 {
+        margin: 0;
+        font-size: 8rem;
+    }
+
+    h3 {
+
+        font-size: 2rem;
+    }
+
+    p {
+        font-size: 2rem;
     }
 }
 
@@ -106,9 +156,5 @@ footer {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    align-items: center; 
-}
-
-.bodyContainer {
-    min-height: 100vh;
+    align-items: center;
 }

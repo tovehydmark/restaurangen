@@ -2,7 +2,7 @@ import axios from "axios";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { resId, url } from "../services/createRestaurant";
-import { RestaurantBooking } from "./Admin";
+import { RestaurantBooking } from "../models/RestaurantBooking";
 
 export class Customer {
   constructor(
@@ -329,7 +329,11 @@ export const AdminDetails = () => {
 
   let saveBtn = <></>;
   if (editOK) {
-    saveBtn = <button onClick={saveChanges}>Spara ändringar</button>;
+    saveBtn = (
+      <button className="changeBtn" onClick={saveChanges}>
+        Spara ändringar
+      </button>
+    );
   }
 
   //The editform is only shown if the showForm value is true
@@ -362,7 +366,7 @@ export const AdminDetails = () => {
           />
         </form>
         <button className="changeBtn" onClick={checkFreeTables}>
-          kontrollera lediga bord
+          Kontrollera lediga bord
         </button>
         <button className="deleteBtn" onClick={hideEditForm}>
           Avbryt

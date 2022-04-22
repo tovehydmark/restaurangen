@@ -1,4 +1,3 @@
-// MOBILLÄGE //
 @mixin btn {
     color: #fff;
     border-radius: 8px;
@@ -20,6 +19,20 @@ header {
     height: 105px;
     z-index: 10;
 
+    .mobileHomeLogo {
+        text-decoration: none;
+        color: black;
+    }
+
+    //Classes assigned to navigation when hamburger is opened or closed
+    .hide {
+        display: none;
+    }
+
+    .show {
+        display: inline;
+    }
+
     //Hamburger menu styling and animation
     .burger {
         width: 2rem;
@@ -35,7 +48,7 @@ header {
         width: 2rem;
         height: 0.25rem;
         border-radius: 10px;
-        background-color: black;
+        background-color: #ffffff;
         transform-origin: 1px;
         z-index: 100;
         transform: rotate(45deg);
@@ -52,14 +65,13 @@ header {
         width: 2rem;
         height: 0.25rem;
         border-radius: 10px;
-        background-color: black;
+        background-color: rgb(255, 255, 255);
         transform-origin: 1px;
         z-index: 100;
         transform: rotate(-45deg);
         position: absolute;
         top: 41px;
     }
-
 }
 
 // MAIN OUTLET //
@@ -85,8 +97,11 @@ main {
     }
 }
 
+.bodyContainer {
+    min-height: 100vh;
+}
 
-// STARTSIDAN //
+// STARTPAGE SLIDER IMAGES //
 
 @keyframes changeBg {
 
@@ -157,7 +172,12 @@ main {
     padding: $base-padding $base-padding * 2;
 }
 
-// MENYSIDAN //
+// CONTACTPAGE //
+.mapImg {
+    width: 300px;
+}
+
+// MENUPAGE //
 
 .menuContainer {
     margin: 8px * 2;
@@ -183,22 +203,16 @@ main {
     }
 }
 
-// BOOKINGSIDAN //
+// BOOKINGPAGE //
 .showBookings {
     display: flex;
 }
 
 .bookingDetails {
-    // display: flex;
-    // flex-direction: column;
-    // flex-wrap: wrap;
-    // justify-content: space-between;
-    // align-items: center;
 
     ul {
         list-style: none;
     }
-
 }
 
 .loader {
@@ -256,8 +270,6 @@ main {
         color: $warningBtn-color;
         font-weight: bold;
     }
-
-
 
     .bookingUserForm {
         display: flex;
@@ -325,7 +337,6 @@ main {
             padding-top: 0;
         }
 
-
         .bookingBtn {
             background-color: $baseBtn-color;
             @include btn;
@@ -334,7 +345,7 @@ main {
     }
 }
 
-// ADMINSIDAN //
+// ADMINPAGE //
 .showBookingsBtn {
     display: inline-block;
     margin: $base-padding;
@@ -349,7 +360,7 @@ main {
     margin-top: $base-padding *3;
 }
 
-// ADMIN--BOOKINGINFO //
+// ADMIN--BOOKINGINFOPAGE //
 .linkBackToBookings {
     color: #000;
     font-family: $heading-font;
@@ -381,7 +392,6 @@ main {
         padding: $base-padding;
         margin: $base-padding;
     }
-
 }
 
 .detailsInList {
@@ -398,8 +408,32 @@ main {
             margin-bottom: $base-padding * 2;
         }
     }
+}
 
+// NOTFOUNDPAGE //
+.notfoundContainer {
 
+    .crabImg {
+        width: 280px;
+    }
+
+    h1 {
+        color: $warningBtn-color;
+        font-size: 4rem;
+        font-family: $base-font;
+        font-weight: 200;
+    }
+
+    h3 {
+        font-family: $heading-font;
+        color: $baseBtn-color;
+        font-weight: 400;
+    }
+
+    p {
+        font-size: 1rem;
+        margin: $base-padding;
+    }
 }
 
 // FOOTER //
@@ -413,13 +447,8 @@ footer {
     width: 100%;
     top: 100vh;
     margin-top: $base-padding * 4;
-
 }
 
 .footerPhone {
     padding-top: 1rem;
-}
-
-.bodyContainer {
-    min-height: 100vh;
 }

@@ -2,6 +2,8 @@ interface IHamburgerProps {
   isOpen: boolean;
 }
 
+//Styling for classes in the hamburger div is in _base.scss file
+
 export function HamburgerDiv(props: IHamburgerProps) {
   return (
     <div className="containerForBurger">
