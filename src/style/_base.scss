@@ -1,22 +1,88 @@
-//För mobil-layout
-$base-padding: 8px;
-$base-font: "Roboto", sans-serif;
-$heading-font: "Merriweather", serif;
-
-header {
-    font-family: $heading-font;
-    display: flex;
-    justify-content: center;
-    background-color: #00817882;
-    height: 105px;
+@mixin btn {
+    color: #fff;
+    border-radius: 8px;
+    border: none;
+    font-size: 1rem;
+    font-family: $base-font;
+    cursor: pointer;
+    padding: $base-padding;
 }
 
+// HEADER //
+header {
+    font-family: $heading-font;
+    position: sticky;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    background-color: #7dbfba;
+    height: 105px;
+    z-index: 10;
+
+    .mobileHomeLogo {
+        text-decoration: none;
+        color: black;
+    }
+
+    //Classes assigned to navigation when hamburger is opened or closed
+    .hide {
+        display: none;
+    }
+
+    .show {
+        display: inline;
+    }
+
+    //Hamburger menu styling and animation
+    .burger {
+        width: 2rem;
+        height: 0.25rem;
+        border-radius: 10px;
+        background-color: black;
+        transform-origin: 1px;
+        z-index: 100;
+        margin-top: 5px;
+    }
+
+    .burger1 {
+        width: 2rem;
+        height: 0.25rem;
+        border-radius: 10px;
+        background-color: #ffffff;
+        transform-origin: 1px;
+        z-index: 100;
+        transform: rotate(45deg);
+        margin-bottom: 17px;
+        position: absolute;
+        top: 20px;
+    }
+
+    .burger2 {
+        display: none
+    }
+
+    .burger3 {
+        width: 2rem;
+        height: 0.25rem;
+        border-radius: 10px;
+        background-color: rgb(255, 255, 255);
+        transform-origin: 1px;
+        z-index: 100;
+        transform: rotate(-45deg);
+        position: absolute;
+        top: 41px;
+    }
+}
+
+// MAIN OUTLET //
 main {
+    text-align: center;
+    min-height: 100%;
 
     p {
         font-family: $base-font;
         font-size: 1rem;
-        // padding: $base-padding;
+        padding: $base-padding;
     }
 
     h2 {
@@ -30,6 +96,89 @@ main {
         font-size: 1.5rem;
     }
 }
+
+.bodyContainer {
+    min-height: 100vh;
+}
+
+// STARTPAGE SLIDER IMAGES //
+
+@keyframes changeBg {
+
+    0% {
+        right: 0px;
+    }
+
+    10% {
+        right: 0px;
+    }
+
+    20% {
+        right: 400px;
+    }
+
+    30% {
+        right: 400px;
+    }
+
+    40% {
+        right: 800px;
+    }
+
+    50% {
+        right: 800px;
+    }
+
+    60% {
+        right: 400px;
+    }
+
+    70% {
+        right: 400px;
+    }
+
+    80% {
+        right: 0px;
+    }
+
+    90% {
+        right: 0px;
+    }
+
+    100% {
+        right: 0px;
+    }
+}
+
+.slideWrap {
+    margin: 0 auto;
+    max-width: 400px;
+    overflow: hidden;
+}
+
+.photoContainer {
+    display: flex;
+    overflow: hidden;
+    margin-top: 3rem;
+
+    .photos {
+        width: 400px;
+        position: relative;
+        animation: changeBg 33s ease infinite;
+    }
+}
+
+.startpageTextContainer {
+    padding: $base-padding $base-padding * 2;
+}
+
+// CONTACTPAGE //
+.mapImg {
+    width: 300px;
+}
+
+// MENUPAGE //
+
 .menuContainer {
     margin: 8px * 2;
     display: flex;
@@ -39,49 +188,68 @@ main {
 
     .menuList {
         padding: $base-padding;
+
+        p {
+            padding: 0;
+        }
     }
-footer {
-    font-family: $base-font;
-}
+
+    footer {
+        font-family: $base-font;
+    }
 
     .menuPrice {
         font-weight: 700;
     }
 }
 
+// BOOKINGPAGE //
 .showBookings {
     display: flex;
 }
 
 .bookingDetails {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
 
     ul {
         list-style: none;
-        text-align: left;
+    }
+}
+
+.loader {
+    border: 5px solid #7dbfba;
+    border-top: 5px solid $baseBtn-color;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
     }
 
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
-footer {
-    font-family: 'roboto, sans-serif';
-    background-color: #00817814;
-}
 .bookingDiv {
     display: flex;
-    flex-direction: row;
-    gap: $base-padding * 2;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     padding: $base-padding;
 
-    label{
+    label {
         font-family: $base-font;
         font-size: 1rem;
         padding-top: $base-padding;
         margin-top: $base-padding * 2;
+    }
+
+    .guestInputDiv {
+        width: 45vw;
     }
 
     input {
@@ -89,83 +257,198 @@ footer {
         padding: $base-padding;
     }
 
-    .bookingSearchForm{
+    .bookingSearchForm {
         display: flex;
         flex-direction: column;
-        
-        input{
+
+        input {
             width: 45vw;
         }
-        
     }
 
-    .bookingUserForm{
+    .alertP {
+        color: $warningBtn-color;
+        font-weight: bold;
+    }
+
+    .bookingUserForm {
         display: flex;
         flex-direction: column;
         align-items: center;
 
-        input{
+        .gdpr {
+            width: 45vw;
+
+            input {
+                width: 20px;
+            }
+        }
+
+        input {
             width: 45vw;
         }
 
-        .bookingTimesDiv{
+        .bookingTimesDiv {
             display: flex;
             flex-direction: row;
             width: auto;
-            
-            .bookingRadioInput1{
+
+            .bookingRadioInput1 {
                 display: flex;
                 flex-direction: row;
                 width: 23.5vw;
                 border: 1px solid black;
                 margin-top: $base-padding;
 
-                label{
+                label {
                     width: auto;
                     padding: $base-padding/2;
                     margin: 0;
                 }
 
-                input{
+                input {
                     width: auto;
                 }
             }
 
-            .bookingRadioInput2{
+            .bookingRadioInput2 {
                 display: flex;
                 flex-direction: row;
                 width: 23.5vw;
                 border: 1px solid black;
                 margin-top: $base-padding;
 
-                label{
+                label {
                     width: auto;
                     padding: $base-padding/2;
                     margin: 0;
                 }
 
-                input{
+                input {
                     width: auto;
                 }
             }
         }
 
         .errorMessage {
-            color: #CF1D15;
+            color: $warningBtn-color;
             font-family: $base-font;
             margin-top: 0;
             padding-top: 0;
         }
 
         .bookingBtn {
-            background-color: #008178;
-            color: #FFF;
-            border-radius: 8px;
-            border: none;
-            font-size: 1rem;
-            font-family: $base-font;
-            cursor: pointer;
+            background-color: $baseBtn-color;
+            @include btn;
             width: 80px;
         }
     }
+}
+
+// ADMINPAGE //
+.showBookingsBtn {
+    display: inline-block;
+    margin: $base-padding;
+    text-decoration: none;
+    background-color: $baseBtn-color;
+    @include btn;
+}
+
+.bookingInList {
+    list-style-type: none;
+    padding: 0;
+    margin-top: $base-padding *3;
+}
+
+// ADMIN--BOOKINGINFOPAGE //
+.linkBackToBookings {
+    color: #000;
+    font-family: $heading-font;
+    font-weight: 700;
+    font-size: 1.4rem;
+    margin: $base-padding *4;
+    display: inline-block;
+}
+
+.changeBtn {
+    background-color: $baseBtn-color;
+    @include btn;
+}
+
+.deleteBtn {
+    background-color: $warningBtn-color;
+    @include btn;
+    margin: $base-padding;
+}
+
+.adminForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: $base-padding;
+
+    input {
+        width: 45vw;
+        padding: $base-padding;
+        margin: $base-padding;
+    }
+}
+
+.detailsInList {
+    list-style-type: none;
+    width: 25vw;
+    padding: 0;
+    margin: 0 auto;
+
+    li {
+        text-align: left;
+
+        button {
+            margin-top: $base-padding;
+            margin-bottom: $base-padding * 2;
+        }
+    }
+}
+
+// NOTFOUNDPAGE //
+.notfoundContainer {
+
+    .crabImg {
+        width: 280px;
+    }
+
+    h1 {
+        color: $warningBtn-color;
+        font-size: 4rem;
+        font-family: $base-font;
+        font-weight: 200;
+    }
+
+    h3 {
+        font-family: $heading-font;
+        color: $baseBtn-color;
+        font-weight: 400;
+    }
+
+    p {
+        font-size: 1rem;
+        margin: $base-padding;
+    }
+}
+
+// FOOTER //
+footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: $base-font;
+    background-color: #00817814;
+    position: sticky;
+    width: 100%;
+    top: 100vh;
+    margin-top: $base-padding * 4;
+}
+
+.footerPhone {
+    padding-top: 1rem;
 }

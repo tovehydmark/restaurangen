@@ -1,348 +1,519 @@
 import { ChangeEvent, useEffect, useState } from "react";
-import Calendar from "react-calendar"
 import { useForm } from "react-hook-form";
-import { ErrorMessage } from "@hookform/error-message"
+import { ErrorMessage } from "@hookform/error-message";
 import axios from "axios";
-// Skrev in interface här sålänge, men kanske kan vara värt att ha en modelsmapp med interfaces?
-interface INewUser {
-  firstname: string;
-  lastname: string;
-  email: string;
-  phonenumber: string;
+import { INewBooking } from "../models/INewBooking";
+import { IFormInputs } from "../models/IFormInputs";
+import { IBookings } from "../models/IBookings";
+import { Bookings } from "../models/Bookings";
+import { Button } from "./styledComponents/Button";
+import { resId, url } from "../services/createRestaurant";
+
+export class BookingInfo {
+  constructor(
+    public date: string,
+    public time: string,
+    public numberOfGuests: string
+  ) {}
 }
 
-interface INewBookning {
-  restaurantId: string;
-  date: string;
-  time: string;
-  numberOfGuests: string;
-  customer: INewUser;
+//Function that counts number of booked tables. It needs one argument, a filter listed of bookings for the time and date of the booking too be changed
+function countTables(listOfbookings: Bookings[]) {
+  let bookedTables = 0;
+  for (let i = 0; i < listOfbookings.length; i++) {
+    bookedTables += Math.floor(Number(listOfbookings[i].numberOfGuests) / 6);
+    if (Number(listOfbookings[i].numberOfGuests) % 6 !== 0) {
+      bookedTables += 1;
+    }
+  }
+  return bookedTables;
 }
 
-interface IFormInputs {
-  firstname: string;
-  lastname: string;
-  email: string;
-  phonenumber: string;
-  GDPR: boolean;
-}
+//Function that checks number of tables needed if a booking is changed, i needs 2 arguments, number of guests and number of tables booked.
+//The number of tables booked is returned from the countTables function.
+function canBeBooked(numberOfGuests: number, tablesBooked: number) {
+  let numberOfTables = 15;
+  let tablesNeeded = Math.floor(Number(numberOfGuests) / 6);
+  if (Number(numberOfGuests) % 6 !== 0) {
+    tablesNeeded += 1;
+  }
 
-interface IBookings {
-  id: string;
-  restaurantId: string;
-  date: string;
-  time: string;
-  numberOfGuests: string;
-  customerId: string;
-}
+  if (numberOfTables - tablesBooked < tablesNeeded) {
+    console.log("Det finns inga lediga bord 18.00");
+    return false;
+  }
+  console.log("Det finns lediga bord");
 
-class Bookings {
-  constructor(public date: string, public time: string, public numberOfGuests: string){}
+  return true;
 }
 
 export function Booking() {
-  const [date, setDate] = useState('');
-  const [time, setTime] = useState('');
-  const [numberOfGuests, setNumberOfGuests] = useState('');
-  // const [newUser, setNewUser] = useState<INewUser>({
-  //   firstname: "",
-  //   lastname: "",
-  //   email:"",
-  //   phonenumber: ""
-  // })
+  //The new booking made
+  const [bookingMade, setBookingMade] = useState<BookingInfo>();
+  //The list of all bookings fetched from API
   const [bookings, setBookings] = useState<Bookings[]>([]);
+  //States that are set by the user through input
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [numberOfGuests, setNumberOfGuests] = useState("");
+  //States that show and hide rendered content
+  const [showFirstTime, setShowFirstTime] = useState(false);
+  const [showSecondTime, setShowSecondTime] = useState(false);
+  const [showUserForm, setShowUserForm] = useState(false);
+  const [showBookTableDiv, setShowTableDiv] = useState(false);
+  const [showBookingDiv, setShowBookingDiv] = useState(true);
+  const [showLoader, setShowLoader] = useState(false);
+  const [showGuestsInput, setShowGuestsInput] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
 
+  //Fetches all bookings from API and maps them to a list
   useEffect(() => {
-    axios.get<IBookings[]>('https://school-restaurant-api.azurewebsites.net/booking/restaurant/' + resId)
-    .then(response => {
-      let bookingsFromAPI = response.data.map((bookings: IBookings) =>{
-        console.log(bookings);
-        
-        return new Bookings(bookings.date, bookings.time, bookings.numberOfGuests)
+    axios
+      .get<IBookings[]>(url + "booking/restaurant/" + resId)
+      .then((response) => {
+        let bookingsFromAPI = response.data.map((bookings: IBookings) => {
+          return new Bookings(
+            bookings.date,
+            bookings.time,
+            bookings.numberOfGuests
+          );
+        });
+        setBookings(bookingsFromAPI);
       });
-      setBookings(bookingsFromAPI)
-    });
   }, []);
-  
-console.log(bookings);
 
+  //Checks if there is any available tables for searched date
+  function checkFreeTables() {
+    //Filters the list of all bookings to a list with the bookings for searched date
+    let bookedTables = bookings.filter((x) => x.date === date);
+    //countTables recives a filtred list of the bookings made 18.00
+    //countTables  returns the number of booked tables
+    //canBeBooked recives the number of guest from user input, and number of booked tables from countTables
+    //cabBeBooked returns true or false
+    //setShowFirstTime is set with true or false depending on the return from canBeBooked
+    setShowFirstTime(
+      canBeBooked(
+        Number(numberOfGuests),
+        countTables(bookedTables.filter((x) => x.time === "18.00"))
+      )
+    );
+    //Does the same thing as above but for time 21.00
+    setShowSecondTime(
+      canBeBooked(
+        Number(numberOfGuests),
+        countTables(bookedTables.filter((x) => x.time === "21.00"))
+      )
+    );
 
+    setShowTableDiv(true);
+    setShowUserForm(false);
+  }
 
-  //React-form-hook tar emot data från inputfält vid submit
+  //React-form-hook  recives data from inputfields on submit
   const {
     register,
     formState: { errors },
-    handleSubmit
+    handleSubmit,
   } = useForm<IFormInputs>({
-    criteriaMode: "all"
+    criteriaMode: "all",
   });
-  
-  
-  let resId = "624c1940850953b8ad161715";
-  let newBooking: INewBookning = {restaurantId:'', date:'', time:'', numberOfGuests:'', customer: {firstname:'', lastname:'', email: '', phonenumber: ''}};
-  let yearToString = '';
-  let monthToString = '';
-  let dayToString = '';
+
+  let newBooking: INewBooking = {
+    restaurantId: "",
+    date: "",
+    time: "",
+    numberOfGuests: "",
+    customer: { name: "", lastname: "", email: "", phone: "" },
+  };
   let todaysDate = new Date();
-  let todaysDateToString = ''
+  let todaysDateToString = "";
 
-  //Okej, så insåg att om vi ska använda react kalendern måste datum konverteras till rätt format (en sträng) 
-  //samt att jag inte har så bra koll på hur man kontrollerar att ett datum inte passerat osv.. 
-  // Men man kan använda input type text istället som retunerar rätt format direkt och verkar enklare att kontrollera.
-  // Kanske värt att satsa på istället?
-
-  // function getFreeTables(value: Date) {
-  //   setDate(value);
-  //   dateToString(value);
-  
-  //   let checkDate = yearToString + monthToString + dayToString;
-  //   console.log(checkDate);
-  // }
-
- // Konverterar Date till en sträng i samma format som API:et använder
-  function dateToString(value: Date){
-    if (value.getDate() < 10){
-      dayToString = '-0' + value.getDate().toString();
-    }
-    else{
-      dayToString ='-' + value.getDate().toString();
-    }
+  // Converts Date to a string
+  function dateToString(value: Date) {
+    let yearToString = "";
+    let monthToString = "";
+    let dayToString = "";
     
-    if(value.getMonth() +1 < 10){
-      monthToString = '-0' + ((value.getMonth()+1).toString());
+    if (value.getDate() < 10) {
+      dayToString = "-0" + value.getDate().toString();
+    } else {
+      dayToString = "-" + value.getDate().toString();
     }
-    else {
-      monthToString = '-' + ((value.getMonth()+1).toString());
+
+    if (value.getMonth() + 1 < 10) {
+      monthToString = "-0" + (value.getMonth() + 1).toString();
+    } else {
+      monthToString = "-" + (value.getMonth() + 1).toString();
     }
     yearToString = value.getFullYear().toString();
 
-    todaysDateToString = yearToString + monthToString + dayToString
+    todaysDateToString = yearToString + monthToString + dayToString;
   }
 
-  dateToString(todaysDate)
+  //Converts todays date to a string
+  dateToString(todaysDate);
 
-  //Skapar en ny användare genom att hämta värden från formulär
-  // const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-  //   let name = e.target.name;
-  //   setNewUser({...newUser, [name]: e.target.value})
-  // }
-
-  //Kontrollerar och uppdaterar vald tid för bokning
+  //Controlls and updates time choosen from input
   const setTimeChecked = (e: ChangeEvent<HTMLInputElement>) => {
     let time = e.target.value;
     setTime(time);
-  }
+  };
 
-  //Kontrollerar och uppdaterar vald dag för bokning
+  //Controlls and updates date choosen from input
   const setDateChecked = (e: ChangeEvent<HTMLInputElement>) => {
     let date = e.target.value;
     setDate(date);
-  }
-  //Kontrollerar och uppdaterar antal gäster
+    setShowGuestsInput(true);
+  };
+  //Controlls and updates number of guests choosen from input
   const setGuests = (e: ChangeEvent<HTMLInputElement>) => {
     let guests = e.target.value;
     setNumberOfGuests(guests);
-  }
-  //Kontrollerar och uppdaterar användaren, skapar objekt för ny bokning som ska skickas till API
+
+    if (Number(guests) > 0) {
+      setShowSearch(true);
+    } else {
+      setShowSearch(false);
+    }
+  };
+
+  //Controlls and updates user information from user input
+  //Sets the values of the new booking from user inputs
   const onSubmit = (user: IFormInputs) => {
-    newBooking = {restaurantId:resId, date:date, time:time, numberOfGuests: numberOfGuests, customer: user};
+    newBooking = {
+      restaurantId: resId,
+      date: date,
+      time: time,
+      numberOfGuests: numberOfGuests,
+      customer: user,
+    };
     sendBooking(newBooking);
+    setShowBookingDiv(false);
+  };
+  //Sends the new booking to API
+  function sendBooking(createBooking: INewBooking) {
+    if (bookingMade === undefined) {
+      setShowLoader(true);
+    }
+    axios
+      .post(
+        "https://school-restaurant-api.azurewebsites.net/booking/create",
+        createBooking
+      )
+      .then((response) => {
+        getBookingInfo(response.data.insertedId);
+      });
+  }
+  //Gets the info from the new booking from API
+  function getBookingInfo(bookingId: string) {
+    axios
+      .get(
+        "https://school-restaurant-api.azurewebsites.net/booking/" + bookingId
+      )
+      .then((response) => {
+        let bookingInfoFromApi = response.data[0];
+        setBookingMade(bookingInfoFromApi);
+        setShowLoader(false);
+      });
   }
 
-  function sendBooking(createBooking:INewBookning) {
-    console.log(createBooking);
-    
-    axios.post('https://school-restaurant-api.azurewebsites.net/booking/create', createBooking).then(response => {console.log(response.data)});
+  //Shows the user form inputs when a time is selected
+  function timeSlected() {
+    setShowUserForm(true);
   }
-    
-  return <div className="bookingDiv">
-    <form className="bookingSearchForm">
-      <label htmlFor="date">Välj datum: </label>
-      <input required type="date" name="date" min={todaysDateToString} onChange={setDateChecked}></input>
 
-      <label htmlFor="numberOfGuests">Antal personer: </label>
-      <input required name="numberOfGuests" type="number" min="1" max="6" onChange={setGuests}></input>
-    </form>
+// Variables containing the html for rendering
+  let firstFreeTime = (
+    <div className="bookingRadioInput1">
+      <input
+        required
+        type="radio"
+        name="time"
+        value="18.00"
+        onChange={setTimeChecked}
+        onClick={timeSlected}
+      />
+      <label htmlFor="time">18.00</label>
+    </div>
+  );
+  if (!showFirstTime) {
+    firstFreeTime = <></>;
+  }
 
+  let secondFreeTime = (
+    <div className="bookingRadioInput2">
+      <input
+        className="bookingRadioInput2"
+        required
+        type="radio"
+        name="time"
+        value="21.00"
+        onChange={setTimeChecked}
+        onClick={timeSlected}
+      />
+      <label htmlFor="time">21.00</label>
+    </div>
+  );
+  if (!showSecondTime) {
+    secondFreeTime = <></>;
+  }
+
+  let userForm = (
     <form className="bookingUserForm" onSubmit={handleSubmit(onSubmit)}>
-      <label>Välj tid:</label>
-      <div className="bookingTimesDiv">
-        <div className="bookingRadioInput1">
-          <input required type="radio" name="time" value="18.00" onChange={setTimeChecked}  />
-          <label htmlFor="time">18.00</label>
-        </div>
-
-        <div className="bookingRadioInput2">
-          <input className="bookingRadioInput2" required type="radio" name="time" value="21.00"  onChange={setTimeChecked} />
-          <label htmlFor="time">21.00</label>
-        </div>
-      </div>
-
-      <label htmlFor="firstname">Förnamn: </label>
-      <input placeholder="Sven" {...register("firstname", {
-        required: "Du måste fylla i förnamn",
-        pattern: {
-          value: /^[A-Za-z]+$/i,
-          message: "Får bara innehålla bokstäver"
-        },
-        minLength: {
-          value: 2,
-          message: "Fältet innehåller för få tecken"
-        }
-
-      })} />
+      <label htmlFor="name">Förnamn: </label>
+      <input
+        placeholder="Sven"
+        {...register("name", {
+          required: "Du måste fylla i förnamn",
+          pattern: {
+            value: /^[A-Za-z]+$/i,
+            message: "Får bara innehålla bokstäver",
+          },
+          minLength: {
+            value: 2,
+            message: "Fältet innehåller för få tecken",
+          },
+        })}
+      />
 
       <ErrorMessage
         errors={errors}
-        name="firstname"
+        name="name"
         render={({ messages }) => {
           console.log("messages", messages);
           return messages
             ? Object.entries(messages).map(([type, message]) => (
-                <p className="errorMessage" key={type}>{message}</p>
+                <p className="errorMessage" key={type}>
+                  {message}
+                </p>
               ))
             : null;
         }}
       />
 
       <label htmlFor="lastname">Efternamn: </label>
-      <input placeholder="Svensson" {...register("lastname", {
-              required: "Du måste fylla i efternamn",
-              pattern: {
-                value: /^[A-Za-z]+$/i,
-                message: "Får bara innehålla bokstäver"
-              },
-              minLength: {
-                value: 2,
-                message: "Fältet innehåller för få tecken"
-              }
+      <input
+        placeholder="Svensson"
+        {...register("lastname", {
+          required: "Du måste fylla i efternamn",
+          pattern: {
+            value: /^[A-Za-z]+$/i,
+            message: "Får bara innehålla bokstäver",
+          },
+          minLength: {
+            value: 2,
+            message: "Fältet innehåller för få tecken",
+          },
+        })}
+      />
 
-            })} />
-
-            <ErrorMessage
-              errors={errors}
-              name="lastname"
-              render={({ messages }) => {
-                console.log("messages", messages);
-                return messages
-                  ? Object.entries(messages).map(([type, message]) => (
-                      <p className="errorMessage" key={type}>{message}</p>
-                    ))
-                  : null;
-              }}
-            />
+      <ErrorMessage
+        errors={errors}
+        name="lastname"
+        render={({ messages }) => {
+          console.log("messages", messages);
+          return messages
+            ? Object.entries(messages).map(([type, message]) => (
+                <p className="errorMessage" key={type}>
+                  {message}
+                </p>
+              ))
+            : null;
+        }}
+      />
 
       <label htmlFor="email">Email: </label>
-      <input placeholder="sven@domän.se" {...register("email", {
-              required: "Du måste fylla i email",
-              pattern: {
-                value:/^[A-Za-z0-9_-]+@[a-z0-9.-]+\.[a-z]{2,4}$/i,
-                message: "Måste vara en emailadress"
-              },
-              minLength: {
-                value: 5,
-                message: "Fältet innehåller för få tecken"
-              }
+      <input
+        placeholder="sven@domän.se"
+        {...register("email", {
+          required: "Du måste fylla i email",
+          pattern: {
+            value: /^[A-Za-z0-9_-]+@[a-z0-9.-]+\.[a-z]{2,4}$/i,
+            message: "Måste vara en emailadress",
+          },
+          minLength: {
+            value: 5,
+            message: "Fältet innehåller för få tecken",
+          },
+        })}
+      />
 
-            })} />
+      <ErrorMessage
+        errors={errors}
+        name="email"
+        render={({ messages }) => {
+          console.log("messages", messages);
+          return messages
+            ? Object.entries(messages).map(([type, message]) => (
+                <p className="errorMessage" key={type}>
+                  {message}
+                </p>
+              ))
+            : null;
+        }}
+      />
 
-            <ErrorMessage
-              errors={errors}
-              name="email"
-              render={({ messages }) => {
-                console.log("messages", messages);
-                return messages
-                  ? Object.entries(messages).map(([type, message]) => (
-                      <p className="errorMessage" key={type}>{message}</p>
-                    ))
-                  : null;
-              }}
-            />
+      <label htmlFor="phone">Telefonnummer: </label>
+      <input
+        placeholder="0700000000"
+        {...register("phone", {
+          required: "Du måste fylla i telefonnummer",
+          pattern: {
+            value: /^[0-9]+$/i,
+            message: "Fältet får endast innehålla siffror",
+          },
+          minLength: {
+            value: 5,
+            message: "Fältet innehåller för få tecken",
+          },
+        })}
+      />
 
-      <label htmlFor="phonenumber">Telefonnummer: </label>
-      <input placeholder="0700000000" {...register("phonenumber", {
-              required: "Du måste fylla i telefonnummer",
-              pattern: {
-                value:/^[0-9]+$/i,
-                message: "Fältet får endast innehålla siffror"
-              },
-              minLength: {
-                value: 5,
-                message: "Fältet innehåller för få tecken"
-              }
-
-            })} />
-
-            <ErrorMessage
-              errors={errors}
-              name="phonenumber"
-              render={({ messages }) => {
-                console.log("messages", messages);
-                return messages
-                  ? Object.entries(messages).map(([type, message]) => (
-                      <p className="errorMessage" key={type}>{message}</p>
-                    ))
-                  : null;
-              }}
-            />
+      <ErrorMessage
+        errors={errors}
+        name="phone"
+        render={({ messages }) => {
+          console.log("messages", messages);
+          return messages
+            ? Object.entries(messages).map(([type, message]) => (
+                <p className="errorMessage" key={type}>
+                  {message}
+                </p>
+              ))
+            : null;
+        }}
+      />
 
       <div className="gdpr">
-      <label htmlFor="GDPR">Jag godkänner att The Codfather får lagra och använda mina personuppgifter enligt GDPR</label>
-      <input type="checkbox" {...register("GDPR", {
-        required: "Du måste godkänna hantering av personuppgifter för att kunna boka"
-      })}/>
-      <ErrorMessage
-              errors={errors}
-              name="GDPR"
-              render={({ messages }) => {
-                console.log("messages", messages);
-                return messages
-                  ? Object.entries(messages).map(([type, message]) => (
-                      <p className="errorMessage" key={type}>{message}</p>
-                    ))
-                  : null;
-              }}/>
+        <label htmlFor="GDPR">
+          Jag godkänner att The Codfather får lagra och använda mina
+          personuppgifter enligt GDPR
+        </label>
+        <input
+          type="checkbox"
+          {...register("GDPR", {
+            required:
+              "Du måste godkänna hantering av personuppgifter för att kunna boka",
+          })}
+        />
+        <ErrorMessage
+          errors={errors}
+          name="GDPR"
+          render={({ messages }) => {
+            console.log("messages", messages);
+            return messages
+              ? Object.entries(messages).map(([type, message]) => (
+                  <p className="errorMessage" key={type}>
+                    {message}
+                  </p>
+                ))
+              : null;
+          }}
+        />
       </div>
-      
+
       <input className="bookingBtn" type="submit" />
     </form>
-    
-  </div>;
- {/* <Calendar onChange={getFreeTables} value={date} /> */}
-  /* <form>
-      <label htmlFor="firstname">Förnamn: </label>
-      <input 
-      placeholder="Förnamn" 
-      type="text" 
-      name="firstname" 
-      value={newUser.firstname} 
-      onChange={handleChange} />
+  );
+  if (!showUserForm) {
+    userForm = <></>;
+  }
 
-      <label htmlFor="lastname">Efternamn: </label>
-      <input 
-      placeholder="Efternamn" 
-      type="text" name="lastname" 
-      value={newUser.lastname} 
-      onChange={handleChange} />
+  if (!showUserForm) {
+    userForm = <></>;
+  }
 
-      <label htmlFor="email">Email: </label>
-      <input 
-      placeholder="email@somedomain.com" 
-      name="email" 
-      type="email" 
-      value={newUser.email} 
-      onChange={handleChange} />
+  let chooseTimeLabel = <label>Välj tid:</label>;
+  if (!showFirstTime && !showSecondTime) {
+    firstFreeTime = (
+      <p className="alertP">
+        Det finns inga lediga bord! Prova sök på en annan dag.
+      </p>
+    );
+    chooseTimeLabel = <></>;
+    userForm = <></>;
+  }
 
-      <label htmlFor="phonenumber">Telefonummer: </label>
-      <input 
-      placeholder="070-0000000" 
-      type="text" 
-      name="phonenumber" 
-      value={newUser.phonenumber} 
-      onChange={handleChange} />
+  let bookTableDiv = (
+    <div className="bookingTimesDiv">
+      {chooseTimeLabel}
+      {firstFreeTime}
+      {secondFreeTime}
+    </div>
+  );
+  if (!showBookTableDiv) {
+    bookTableDiv = <></>;
+  }
 
-      <label htmlFor="GDPR">Jag godkänner att The Codfather får lagra och använda mina personuppgifter enligt GDPR </label>
-      
-      <button>Boka</button>
-    </form> */
+  let guestsInput = <></>;
+  if (showGuestsInput) {
+    guestsInput = (
+      <div className="guestInputDiv">
+        <label htmlFor="numberOfGuests">Antal personer: </label>
+        <input
+          className="guestInput"
+          required
+          name="numberOfGuests"
+          type="number"
+          min="1"
+          max="90"
+          onChange={setGuests}
+        ></input>
+      </div>
+    );
+  }
+
+  let searchBtn = <></>;
+  if (showSearch) {
+    searchBtn = <Button onClick={checkFreeTables}>Sök tider</Button>;
+  }
+
+  let loader = <></>;
+  if (showLoader) {
+    loader = <div className="loader"></div>;
+  }
+
+  let bookingDiv = (
+    <div className="bookingDiv">
+      <form className="bookingSearchForm">
+        <label htmlFor="date">Välj datum: </label>
+        <input
+          required
+          type="date"
+          name="date"
+          min={todaysDateToString}
+          onChange={setDateChecked}
+        ></input>
+        {guestsInput}
+      </form>
+      {searchBtn}
+      {bookTableDiv}
+      {userForm}
+    </div>
+  );
+
+  if (!showBookingDiv) {
+    bookingDiv = (
+      <div>
+        {loader}
+        <p>Tack för din bokning!</p>
+        <p>
+          Du har bokat bord den {bookingMade?.date}, klockan {bookingMade?.time}{" "}
+          för {bookingMade?.numberOfGuests} personer.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <h2>Boka bord</h2>
+      <p>
+        Det går även att boka bord genom att ringa till oss på{" "}
+        <a href="tel:+46 70 123 45 67">+46 70 123 45 67</a>
+      </p>
+
+      {bookingDiv}
+    </div>
+  );
 }

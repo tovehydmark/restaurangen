@@ -1,3 +1,9 @@
+This is a group project with the aim to create a table booking system for a restaurant.
+
+To reach the admin page, use route /Admin
+
+Link to Netlify:
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
