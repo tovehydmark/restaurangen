@@ -17,6 +17,7 @@ export class BookingInfo {
   ) {}
 }
 
+//Function that counts number of booked tables. It needs one argument, a filter listed of bookings for the time and date of the booking too be changed
 function countTables(listOfbookings: Bookings[]) {
   let bookedTables = 0;
   for (let i = 0; i < listOfbookings.length; i++) {
@@ -28,6 +29,8 @@ function countTables(listOfbookings: Bookings[]) {
   return bookedTables;
 }
 
+//Function that checks number of tables needed if a booking is changed, i needs 2 arguments, number of guests and number of tables booked.
+//The number of tables booked is returned from the countTables function.
 function canBeBooked(numberOfGuests: number, tablesBooked: number) {
   let numberOfTables = 15;
   let tablesNeeded = Math.floor(Number(numberOfGuests) / 6);
@@ -45,20 +48,25 @@ function canBeBooked(numberOfGuests: number, tablesBooked: number) {
 }
 
 export function Booking() {
+  //The new booking made
+  const [bookingMade, setBookingMade] = useState<BookingInfo>();
+  //The list of all bookings fetched from API
+  const [bookings, setBookings] = useState<Bookings[]>([]);
+  //States that are set by the user through input
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [numberOfGuests, setNumberOfGuests] = useState("");
+  //States that show and hide rendered content
   const [showFirstTime, setShowFirstTime] = useState(false);
   const [showSecondTime, setShowSecondTime] = useState(false);
   const [showUserForm, setShowUserForm] = useState(false);
   const [showBookTableDiv, setShowTableDiv] = useState(false);
   const [showBookingDiv, setShowBookingDiv] = useState(true);
-  const [bookingMade, setBookingMade] = useState<BookingInfo>();
   const [showLoader, setShowLoader] = useState(false);
-  const [bookings, setBookings] = useState<Bookings[]>([]);
   const [showGuestsInput, setShowGuestsInput] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
 
+  //Fetches all bookings from API and maps them to a list
   useEffect(() => {
     axios
       .get<IBookings[]>(url + "booking/restaurant/" + resId)
@@ -74,16 +82,22 @@ export function Booking() {
       });
   }, []);
 
+  //Checks if there is any available tables for searched date
   function checkFreeTables() {
+    //Filters the list of all bookings to a list with the bookings for searched date
     let bookedTables = bookings.filter((x) => x.date === date);
-
+    //countTables recives a filtred list of the bookings made 18.00
+    //countTables  returns the number of booked tables
+    //canBeBooked recives the number of guest from user input, and number of booked tables from countTables
+    //cabBeBooked returns true or false
+    //setShowFirstTime is set with true or false depending on the return from canBeBooked
     setShowFirstTime(
       canBeBooked(
         Number(numberOfGuests),
         countTables(bookedTables.filter((x) => x.time === "18.00"))
       )
     );
-
+    //Does the same thing as above but for time 21.00
     setShowSecondTime(
       canBeBooked(
         Number(numberOfGuests),
@@ -95,7 +109,7 @@ export function Booking() {
     setShowUserForm(false);
   }
 
-  //React-form-hook tar emot data från inputfält vid submit
+  //React-form-hook  recives data from inputfields on submit
   const {
     register,
     formState: { errors },
@@ -111,15 +125,15 @@ export function Booking() {
     numberOfGuests: "",
     customer: { name: "", lastname: "", email: "", phone: "" },
   };
-
-  let yearToString = "";
-  let monthToString = "";
-  let dayToString = "";
   let todaysDate = new Date();
   let todaysDateToString = "";
 
-  // Konverterar Date till en sträng i samma format som API:et använder
+  // Converts Date to a string
   function dateToString(value: Date) {
+    let yearToString = "";
+    let monthToString = "";
+    let dayToString = "";
+    
     if (value.getDate() < 10) {
       dayToString = "-0" + value.getDate().toString();
     } else {
@@ -136,21 +150,22 @@ export function Booking() {
     todaysDateToString = yearToString + monthToString + dayToString;
   }
 
+  //Converts todays date to a string
   dateToString(todaysDate);
 
-  //Kontrollerar och uppdaterar vald tid för bokning
+  //Controlls and updates time choosen from input
   const setTimeChecked = (e: ChangeEvent<HTMLInputElement>) => {
     let time = e.target.value;
     setTime(time);
   };
 
-  //Kontrollerar och uppdaterar vald dag för bokning
+  //Controlls and updates date choosen from input
   const setDateChecked = (e: ChangeEvent<HTMLInputElement>) => {
     let date = e.target.value;
     setDate(date);
     setShowGuestsInput(true);
   };
-  //Kontrollerar och uppdaterar antal gäster
+  //Controlls and updates number of guests choosen from input
   const setGuests = (e: ChangeEvent<HTMLInputElement>) => {
     let guests = e.target.value;
     setNumberOfGuests(guests);
@@ -161,7 +176,9 @@ export function Booking() {
       setShowSearch(false);
     }
   };
-  //Kontrollerar och uppdaterar användaren, skapar objekt för ny bokning som ska skickas till API
+
+  //Controlls and updates user information from user input
+  //Sets the values of the new booking from user inputs
   const onSubmit = (user: IFormInputs) => {
     newBooking = {
       restaurantId: resId,
@@ -173,7 +190,7 @@ export function Booking() {
     sendBooking(newBooking);
     setShowBookingDiv(false);
   };
-
+  //Sends the new booking to API
   function sendBooking(createBooking: INewBooking) {
     if (bookingMade === undefined) {
       setShowLoader(true);
@@ -187,7 +204,7 @@ export function Booking() {
         getBookingInfo(response.data.insertedId);
       });
   }
-
+  //Gets the info from the new booking from API
   function getBookingInfo(bookingId: string) {
     axios
       .get(
@@ -200,10 +217,12 @@ export function Booking() {
       });
   }
 
+  //Shows the user form inputs when a time is selected
   function timeSlected() {
     setShowUserForm(true);
   }
 
+// Variables containing the html for rendering
   let firstFreeTime = (
     <div className="bookingRadioInput1">
       <input
