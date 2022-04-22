@@ -30,8 +30,6 @@ export function Admin() {
 
   //Maps out the bookings with customer in a rendered list.
   let lis = bookings.map((booking, i) => {
-    console.log(booking.customerId);
-
     return (
       <ul key={i} className="bookingInList">
         <li>Boknings id: {booking._id}</li>
