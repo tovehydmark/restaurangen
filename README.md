@@ -1,8 +1,8 @@
-This is a group project with the aim to create a table booking system for a restaurant.
+This is a group project developed in April 2022 with the aim to create a table booking system for a fictional restaurant.
 
-To reach the admin page, use route /Admin
+To reach the admin page where you can manage the bookings, use route /Admin.
 
-Link to Netlify:
+Link to the site published on Netlify: https://spontaneous-elf-ec9ee9.netlify.app/
 
 # Getting Started with Create React App
 
