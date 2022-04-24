@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/restaurangen/static/css/main.0338adcc.css",
+    "main.js": "/restaurangen/static/js/main.f6290b8d.js",
+    "static/js/787.941db087.chunk.js": "/restaurangen/static/js/787.941db087.chunk.js",
+    "static/media/table.png": "/restaurangen/static/media/table.460a37518871519cdd3c.png",
+    "static/media/fishfood.png": "/restaurangen/static/media/fishfood.81bba88d5f46ea85c21e.png",
+    "static/media/seafood.png": "/restaurangen/static/media/seafood.4e6312f1391e2ebaac63.png",
+    "static/media/torskhamn.png": "/restaurangen/static/media/torskhamn.3fbd03833b6b4667f4ae.png",
+    "static/media/CrabwBG.png": "/restaurangen/static/media/CrabwBG.19b615871c42b4619762.png",
+    "index.html": "/restaurangen/index.html",
+    "main.0338adcc.css.map": "/restaurangen/static/css/main.0338adcc.css.map",
+    "main.f6290b8d.js.map": "/restaurangen/static/js/main.f6290b8d.js.map",
+    "787.941db087.chunk.js.map": "/restaurangen/static/js/787.941db087.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.0338adcc.css",
+    "static/js/main.f6290b8d.js"
+  ]
+}
