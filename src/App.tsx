@@ -2,7 +2,7 @@ import React from "react";
 
 import "./App.css";
 import { Layout } from "./components/Layout";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import { Home } from "./components/Home";
 import { Contact } from "./components/Contact";
 import { Booking } from "./components/Booking";
@@ -14,7 +14,7 @@ import { AdminDetails } from "./components/AdminDetails";
 function App() {
   return (
     <>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
@@ -26,7 +26,7 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </>
   );
 }
